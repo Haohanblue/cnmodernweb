@@ -6,8 +6,8 @@ import axios from 'axios'
 import './assets/css/global.less'
 import './assets/font/iconfont.css'
 // import '../public/static/css/iconfont.css'
-
-axios.defaults.baseURL = 'http://localhost:8888/'
+const AXIOSURL = require('../config/config.json').AXIOSURL;
+axios.defaults.baseURL = AXIOSURL
 Vue.prototype.$http = axios
 
 Vue.prototype.$echarts = window.echarts

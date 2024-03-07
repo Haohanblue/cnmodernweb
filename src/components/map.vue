@@ -7,6 +7,7 @@
 import axios from 'axios'
 import { mapState } from "vuex"
 import { getProvinceMapInfo } from '@/utils/map_utils'
+const BASEURL = require('../../config/config.json').BASEURL;
 export default {
     data() {
         return {
@@ -40,7 +41,7 @@ export default {
         async initChart() {
             this.chartInstance = this.$echarts.init(this.$refs.map_ref, this.theme)
             //获取中国地图的矢量数据
-            const ret = await axios.get('http://localhost:8080/static/map/china.json')
+            const ret = await axios.get(BASEURL+'/static/map/china.json')
             this.$echarts.registerMap('china', ret.data)
             //初始化地图
             const initOption = {
@@ -70,7 +71,7 @@ export default {
                 // console.log(provinceInfo);
                 //判断当前点击的省份的地图矢量数据是否存在
                 if (!this.mapData[provinceInfo.key]) {
-                    const ret = await axios.get('http://localhost:8080' + provinceInfo.path)
+                    const ret = await axios.get(BASEURL + provinceInfo.path)
                     this.mapData[provinceInfo.key] = ret.data
                     // console.log(ret);
                     this.$echarts.registerMap(provinceInfo.key, ret.data)
