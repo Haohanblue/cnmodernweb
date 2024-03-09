@@ -9,28 +9,32 @@
         <div class="screen-body">
             <section class="screen-left">
                 <div id="left-top" :class="[fullScreenStatus.trend ? 'fullscreen' : '']">
-                    <!-- 销量趋势图表 -->
                     <trend ref="trend"></trend>
                     <div class="resize">
                         <span :class="['iconfont', fullScreenStatus.trend ? 'icon-compress-alt' : 'icon-expand-alt']"
                         @click="changeSize('trend')"></span>
                     </div>
                 </div>
+
+
                 <div id="left-bottom">
                     <!-- 商家销售金额图表 -->
                 </div>
+
+
             </section>
             <section class="screen-middle">
                 <div id="middle-top" :class="[fullScreenStatus.map ? 'fullscreen' : '']">
-                    <!-- 商家分布图表 -->
                     <map2 ref="map"></map2>
                     <div class="resize">
                         <span :class="['iconfont', fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt']"
                             @click="changeSize('map')"></span>
                     </div>
                 </div>
+
+
+
                 <div id="middle-bottom" :class="[fullScreenStatus.rank ? 'fullscreen' : '']">
-                    <!-- 地区销量排行图表 -->
                     <rank ref="rank"></rank>
                     <div class="resize">
                         <span :class="['iconfont', fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt']"
@@ -45,8 +49,11 @@
                         <span :class="['iconfont', fullScreenStatus.seller ? 'icon-compress-alt' : 'icon-expand-alt']"
                             @click="changeSize('seller')"></span>
                     </div>
-                    <!-- 热销商品占比图表 -->
                 </div>
+
+
+
+
                 <div id="right-bottom">
                     <!-- 库存销量分析图表 -->
                 </div>
@@ -55,10 +62,8 @@
     </div>
 </template>
 <script>
-import singlemap from '@/components/map.vue';
 import map2 from '@/components/map2.vue';
 import trend from '@/components/trend.vue';
-import seller from '@/components/seller.vue';
 import seller2 from '@/components/seller2.vue';
 import rank from '@/components/rank.vue';
 import { mapState } from 'vuex';
@@ -78,7 +83,6 @@ export default {
         }
     },
     components: {
-        singlemap,
         trend,
         seller2,
         rank,

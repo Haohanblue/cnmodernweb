@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import SellerPage from '@/views/SellerPage'
 import SellerPage2 from '@/views/sellerpage2'
 import TrendPage from '@/views/TrendPage'
-import mapPage from '@/views/mapPage'
 import mapPage2 from '@/views/mapPage2'
 import rankPage from'@/views/rankPage'
 import ScreenPage from '@/views/ScreenPage'
@@ -20,10 +18,6 @@ const routes = [
     component:ScreenPage
   },
   {
-    path: '/sellerpage',
-    component: SellerPage
-  },
-  {
     path: '/sellerpage2',
     component: SellerPage2
   },
@@ -31,10 +25,7 @@ const routes = [
     path: '/trendpage',
     component: TrendPage
   },
-  {
-    path: '/mappage',
-    component: mapPage
-  },
+  
   {
     path: '/mappage2',
     component: mapPage2

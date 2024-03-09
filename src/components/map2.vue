@@ -1,5 +1,5 @@
 <template>
-    <div class="com-container" @dblclick="revertMap">
+    <div class="com-container" >
         <div class="com-chart" ref="map_ref"></div>
     </div>
 </template>
@@ -7,14 +7,12 @@
 <script>
 import axios from 'axios'
 import { mapState } from "vuex"
-import { getProvinceMapInfo } from '@/utils/map_utils'
 const BASEURL = require('../../config/config.json').BASEURL;
 export default {
     data() {
         return {
             chartInstance: null,
             allData: null,
-            mapData: {},//缓存省份地图数据
             arrYear: [],//------存入年份
             rets: null,
             jsonData:{}
@@ -22,8 +20,8 @@ export default {
     },
     mounted() {
         this.initChart(),
-            this.getData(),
-            window.addEventListener('resize', this.screenAdapter)
+        this.getData(),
+        window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
     },
     destroyed() {
@@ -43,7 +41,6 @@ export default {
                     top: '20%',
                     bottom: '3%',
                     itemStyle: {
-                        // areaColor: "#7FFFAA",
                         borderColor: "#333"
                     }
                 },
@@ -54,32 +51,12 @@ export default {
                 }
             }
             this.chartInstance.setOption(initOption)
-            this.chartInstance.on('dblclick', async (arg) => {
-                //arg.name得到点击的省份名称，是中文
-                // console.log(arg.name);
-                const provinceInfo = getProvinceMapInfo(arg.name)
-                // console.log(provinceInfo);
-                //判断当前点击的省份的地图矢量数据是否存在
-                if (!this.mapData[provinceInfo.key]) {
-                    const ret = await axios.get(BASEURL + provinceInfo.path)
-                    this.mapData[provinceInfo.key] = ret.data
-                    // console.log(ret);
-                    this.$echarts.registerMap(provinceInfo.key, ret.data)
-                }
-                //重置地图到省份图
-                const changeOption = {
-                    geo: {
-                        map: provinceInfo.key
-                    }
-                }
-                this.chartInstance.setOption(changeOption)
-            })
         },
         async getData() {
             const { data: ret } = await this.$http.get('sql/data')
             // console.log(ret);
             this.rets = ret
-            console.log(this.rets);
+            // console.log(this.rets);
             // this.allData = ret[2].chartData;
             //-----------------
             this.arrYear = ret.map((year, index) => {
@@ -90,9 +67,10 @@ export default {
         },
         updateChart() {
             const colorarr = [
-                'red', 'green', 'yellow', 'pink'
+                'red', 'green', 'yellow', 'pink','blue','orange','Aqua','GreenYellow','Salmon',
+                'DeepPink','OrangeRed','LightSeaGreen','DeepSkyBlue'
             ]
-            // console.log('123456');
+
             const dataOption = {
                 timeline: {
                     data: this.arrYear,
@@ -138,17 +116,17 @@ export default {
 
                 options: []
             }
-            // console.log('1234567');
+
             if (!this.rets) return
             this.rets.forEach((item, index) => {
                 // console.log(item.chartData);
-                // item.chartData.forEach((item2,index2)=>{
-                //     console.log(item2);
-                // })
-                console.log(item.chartData);
-                // console.log(item.chartData.value);
-                // console.log(chartData+'data');
-                // console.log(index);
+                item.chartData.sort((a,b)=>{
+                    return a.value-b.value
+                })
+                const minn=item.chartData[0]
+                const maxx=item.chartData[item.chartData.length-1]
+                console.log(minn);
+                console.log(maxx);
                 dataOption.options.push({
                     title: {
                         text: item.year + '年各省现代化程度',
@@ -163,8 +141,8 @@ export default {
                         }
                     ],
                     visualMap: {
-                        min: 0,
-                        max: 0.020,
+                        min: minn.value,
+                        max: maxx.value-0.01,
                         inRange: {
                             color: ['white', colorarr[index]]
                         },
@@ -173,11 +151,9 @@ export default {
                     }
                 })
             });
-            // console.log('12345678');
-            console.log(this.chartInstance);
-            console.log(dataOption);
+            // console.log(this.chartInstance);
+            // console.log(dataOption);
             this.chartInstance.setOption(dataOption)
-            // console.log('123456789');
         },
         screenAdapter() {
             const titleFontsize = document.querySelector('.com-chart').offsetWidth
@@ -191,15 +167,6 @@ export default {
             }
             this.chartInstance.setOption(adapterOption)
             this.chartInstance.resize()
-        },
-        revertMap() {
-            //重置地图
-            const revertOption = {
-                geo: {
-                    map: 'china'
-                }
-            }
-            this.chartInstance.setOption(revertOption)
         },
 
     },
