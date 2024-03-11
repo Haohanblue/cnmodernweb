@@ -4,7 +4,9 @@
     </div>
 </template>
 
-<style lang="less">
-
+<style>
+.app{
+    height: 100%;
+}
 </style>
 

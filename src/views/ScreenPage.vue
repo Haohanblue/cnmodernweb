@@ -66,6 +66,7 @@ import map2 from '@/components/map2.vue';
 import trend from '@/components/trend.vue';
 import seller2 from '@/components/seller2.vue';
 import rank from '@/components/rank.vue';
+import tabBar from "@/components/tabBar.vue";
 import { mapState } from 'vuex';
 import { getThemeValue } from '@/utils/theme.utils';
 import '@/assets/css2/iconfont.css'
@@ -86,7 +87,8 @@ export default {
         trend,
         seller2,
         rank,
-        map2
+        map2,
+        tabBar
     },
     methods: {
         changeSize(chartName) {

@@ -5,15 +5,16 @@ import store from './store'
 import axios from 'axios'
 import './assets/css/global.less'
 import './assets/font/iconfont.css'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
 // import '../public/static/css/iconfont.css'
 const AXIOSURL = require('../config/config.json').AXIOSURL;
 axios.defaults.baseURL = AXIOSURL
 Vue.prototype.$http = axios
-
 Vue.prototype.$echarts = window.echarts
-
 Vue.config.productionTip = false
-
+Vue.use(ElementUI)
 new Vue({
   router,
   store,

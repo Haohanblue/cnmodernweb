@@ -5,13 +5,17 @@ import TrendPage from '@/views/TrendPage'
 import mapPage2 from '@/views/mapPage2'
 import rankPage from'@/views/rankPage'
 import ScreenPage from '@/views/ScreenPage'
+import HomePage from "@/views/HomePage.vue";
 
 Vue.use(VueRouter)
 
 const routes = [
+  {path:'/home',
+  component: HomePage
+  },
   {
     path:'/',
-    redirect:'/screen'
+    redirect:'/home'
   },
   {
     path:'/screen',
@@ -25,7 +29,7 @@ const routes = [
     path: '/trendpage',
     component: TrendPage
   },
-  
+
   {
     path: '/mappage2',
     component: mapPage2
