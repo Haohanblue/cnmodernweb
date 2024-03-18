@@ -56,7 +56,6 @@ export default {
             const { data: ret } = await this.$http.get('sql/data')
             // console.log(ret);
             this.rets = ret
-            // console.log(this.rets);
             // this.allData = ret[2].chartData;
             //-----------------
             this.arrYear = ret.map((year, index) => {
@@ -121,12 +120,14 @@ export default {
             this.rets.forEach((item, index) => {
                 // console.log(item.chartData);
                 item.chartData.sort((a,b)=>{
-                    return a.value-b.value
+                    return a.score-b.score
                 })
                 const minn=item.chartData[0]
                 const maxx=item.chartData[item.chartData.length-1]
-                console.log(minn);
-                console.log(maxx);
+                const seriesData = item.chartData.map(data => ({
+                    name: data.province,
+                    value: data.score
+                }));
                 dataOption.options.push({
                     title: {
                         text: item.year + '年各省现代化程度',
@@ -135,14 +136,14 @@ export default {
                     },
                     series: [
                         {
-                            data:item.chartData,
+                            data:seriesData,
                             geoIndex: 0,
                             type: "map"
                         }
                     ],
                     visualMap: {
-                        min: minn.value,
-                        max: maxx.value-0.01,
+                        min: minn.score,
+                        max: maxx.score-0.01,
                         inRange: {
                             color: ['white', colorarr[index]]
                         },

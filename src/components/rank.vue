@@ -90,12 +90,12 @@ export default {
         },
         updateChart() {
             const namearr = this.allData.map((item) => {
-                // return item.name
-                return item.name
+                // return item.province
+                return item.province
             })
             const valuearr = this.allData.map(item => {
                 // return item.value
-                return item.value
+                return item.score
             })
             // 处理图表需要的数据
             const dataOption = {

@@ -203,10 +203,10 @@ export default {
 
             const showData = this.allData.slice(start, end)
             const sellNames = showData.map((item) => {//x轴数据
-                return item.name
+                return item.province
             })
             const sellerValue = showData.map((item) => {//y轴数据
-                return item.value
+                return item.score
             })
             const dataOption = {
                 yAxis: {

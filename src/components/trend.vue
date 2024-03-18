@@ -56,7 +56,7 @@ export default {
                     bottom: '10%',
                     containLabel: true
                 },
-                
+
                 xAxis: {
 
                     type: 'category',
@@ -82,7 +82,7 @@ export default {
                 },
             }
             this.chartInstance.setOption(initOption)
-            
+
         },
         async getData() {
             const { data: ret } = await this.$http.get('sql/data')
@@ -96,10 +96,10 @@ export default {
             // const value = this.allData.value
             // const name = this.allData.name
             const xData = this.allData.map(item => {
-                return item.name
+                return item.province
             })
             const yData = this.allData.map(item => {
-                return item.value
+                return item.score
             })
             const dataOption = {
                 dataZoom: {
@@ -131,10 +131,10 @@ export default {
                 ]
             }
             this.chartInstance.setOption(dataOption)
-            
+
         },
         screenAdapter() {
-            
+
             // console.log(document.querySelector('.com-chart').offsetWidth)
             const titleFontsize=document.querySelector('.com-chart').offsetWidth
             // const titleFontsize=this.$refs.trend_ref.offsetWidth /100 *3.6
@@ -172,6 +172,6 @@ export default {
 //     z-index: 10;
 //     position: absolute;
 //     left:10px,
- 
+
 // }
 </style>
