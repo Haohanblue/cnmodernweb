@@ -1,6 +1,11 @@
 <template>
     <div class="com-container" >
-        <div class="com-chart" ref="map_ref"></div>
+        
+     
+        <div class="com-chart" ref="map_ref">
+               <!-- <button @click="resetZoom">还原大小</button> -->
+        </div>
+       
     </div>
 </template>
 
@@ -23,9 +28,11 @@ export default {
         this.getData(),
         window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
+        this.$refs['map_ref'].addEventListener('wheel', this.handleMapZoom, { passive: false })// 修改这行，绑定到地图容器
     },
     destroyed() {
         window.removeEventListener('reisze', this.screenAdapter)
+        this.$refs['map_ref'].removeEventListener('wheel', this.handleMapZoom) // 修改这行，移除绑定的监听器
     },
     methods: {
         async initChart() {
@@ -169,7 +176,22 @@ export default {
             this.chartInstance.setOption(adapterOption)
             this.chartInstance.resize()
         },
-
+        handleMapZoom(event) {
+        // 阻止默认的滚动事件
+        event.preventDefault();
+        // 获取当前地图的缩放级别
+        let scale = this.chartInstance.getOption().geo[0].zoom || 1;
+        // 根据滚动的方向调整缩放级别，这里将缩放因子调整为1.2和0.8，以增加灵敏度
+        scale *= (event.deltaY > 0) ? 0.8 : 1.2;
+        // 限制缩放级别，避免过度放大或缩小
+        scale = Math.min(Math.max(scale, 0.5), 5);
+        // 应用新的缩放级别
+        this.chartInstance.setOption({
+            geo: {
+                zoom: scale
+            }
+        });
+    },
     },
     computed: {
         ...mapState(['theme'])
