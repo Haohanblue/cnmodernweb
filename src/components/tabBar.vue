@@ -1,16 +1,10 @@
 <template>
-    <div>
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-            <el-menu-item index="1" >首页</el-menu-item>
-            <el-submenu index="2">
-                <template slot="title" >排行</template>
-            </el-submenu>
-            <el-menu-item index="3">成就</el-menu-item>
-            <el-menu-item index="4">数据</el-menu-item>
-
-        </el-menu>
-
-    </div>
+  <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tab-pane label="首页" name="first"></el-tab-pane>
+    <el-tab-pane label="排行" name="second"></el-tab-pane>
+    <el-tab-pane label="成就" name="third"></el-tab-pane>
+    <el-tab-pane label="数据" name="fourth"></el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
@@ -19,10 +13,12 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-    .el-menu-demo{
-   
-        height: 0px;
-    }
-    
+<style  scoped>
+.demo-tabs > .el-tabs__content {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
+}
+
 </style>
