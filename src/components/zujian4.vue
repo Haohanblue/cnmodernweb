@@ -1,12 +1,5 @@
 <template>
     <div class='com-container'>
-        <div class="title" :style="titleStyle">
-            <span :style="comStyle">{{ currentYear }}年现代化指标</span>
-            <span class="iconfont title-icon" @click="showChoice=!showChoice" :style="comStyle">&#xe6eb;</span>
-            <div class="select-con" v-show="showChoice">
-                <div class="select-item" @click="handleSelect(item)" v-for="item in selectfilter">{{ item.year }}年现代化指数</div>
-            </div>
-        </div>
         <div class='com-chart' ref='zujian4_ref'></div>
     </div>
 </template>
@@ -17,35 +10,20 @@ import { getThemeValue } from '@/utils/theme.utils'
         data(){
             return{
                 chartInstance: null,
-            allData: null,
-            currentPage: 1,
-            totalPage: 0,
-            timeId: null,
-            showChoice: false,//下拉列表是否出现
-            rets: null,//所有数据
-            currentYear: '2000',//当前年份
-            titleFontsize:0,//给标题设置大小
-            remainPage:0//页面展示除不尽的余数
+                allData: null,
+                currentPage: 1,
+                totalPage: 0,
+                timeId: null,
+                rets: null,//所有数据
+                currentYear: '2000',//当前年份
+                titleFontsize:0,//给标题设置大小
+                remainPage:0//页面展示除不尽的余数
             }
         },
         computed: {
-        selectfilter() {//过滤已选的，不出现在下拉列表中
-            if (!this.rets) {
-                return []
-            } else {
-                return this.rets.filter(item=>{
-                    return item.year!==this.currentYear
-                })
-            }
-        },
         titleStyle(){
             return{
                 fontSize:this.titleFontsize+'px'
-            }
-        },
-        comStyle(){   //切换主题
-            return{
-                color:getThemeValue(this.theme).titleColor
             }
         },
         ...mapState(['theme']),
@@ -71,8 +49,12 @@ import { getThemeValue } from '@/utils/theme.utils'
         methods:{
             initChart(){
                 this.chartInstance=this.$echarts.init(this.$refs.zujian4_ref,this.theme)
-
                 const initOption={
+                    title:{
+                        text:"现代化指标",
+                        left: 20,
+                        top: 20
+                    },
                     grid:{
                         top:'20%',
                         left:'2%',
@@ -85,17 +67,7 @@ import { getThemeValue } from '@/utils/theme.utils'
                     yAxis:{
                         type:'category'
                     },
-                    tooltip: {//背景，提示框
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'line',
-                            z: 0,
-                            lineStyle: {
-                                type: 'solid',//实线
-                                color: '#2D3443'
-                            }
-                        }
-                    },
+                    
                     series: [
                     {
                         type: 'bar',
@@ -221,9 +193,13 @@ import { getThemeValue } from '@/utils/theme.utils'
             }, 3000)
         },
             screenAdapter(){
-                // const titleFontsize=document.querySelector('.com-chart').offsetWidth
                 this.titleFontsize = this.$refs.zujian4_ref.offsetWidth / 100 * 5.0
                 const adapterOption = {
+                    title:{
+                        textStyle:{
+                            fontSize:this.titleFontsize
+                        }
+                    },
                 tooltip: {//背景，提示框
                     axisPointer: {
                         lineStyle: {
@@ -242,13 +218,7 @@ import { getThemeValue } from '@/utils/theme.utils'
             }
                 this.chartInstance.setOption(adapterOption)
                 this.chartInstance.resize()
-            },
-            handleSelect(currentInfo) {
-            this.allData = currentInfo.chartData
-            this.currentYear = currentInfo.year
-            this.updateChart()
-            this.showChoice = false
-        }
+            }
         }
     }
 </script>

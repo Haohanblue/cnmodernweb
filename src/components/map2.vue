@@ -1,9 +1,6 @@
 <template>
     <div class="com-container" >
-        
-     
         <div class="com-chart" ref="map_ref">
-               <!-- <button @click="resetZoom">还原大小</button> -->
         </div>
        
     </div>
@@ -158,8 +155,6 @@ export default {
                     }
                 })
             });
-            // console.log(this.chartInstance);
-            // console.log(dataOption);
             this.chartInstance.setOption(dataOption)
         },
         screenAdapter() {

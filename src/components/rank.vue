@@ -41,9 +41,9 @@ export default {
             this.chartInstance = this.$echarts.init(this.$refs.rank_ref,this.theme)
             const initOption = {
                 title: {
-                    text: '『2000年各省现代化排名』',
-                    letf: 50,
-                    top: '5%'
+                    text: '2000年各省现代化排名',
+                    left: 20,
+                    top: 10
                 },
                 grid: {
                     top: "20%",
@@ -155,19 +155,19 @@ export default {
         },
         screenAdapter() {
 
-            const titleFontsize=this.$refs.rank_ref.offsetWidth/100*5.0
+            const titleFontsize=this.$refs.rank_ref.offsetWidth/100*7.0
             const adapterOption = {
                 title:{
                     textStyle:{
-                        fontStyle:titleFontsize
+                        fontSize:titleFontsize*0.6
                     }
                 },
                 series:[
                     {
                         barWidth:titleFontsize,
-                        // itemStyle:{
-                        //     barBorderRadius:[titleFontsize/2,titleFontsize/2,0,0]
-                        // }
+                        itemStyle:{
+                            barBorderRadius:[titleFontsize/2,titleFontsize/2,0,0]
+                        }
                     }
                 ]
             }

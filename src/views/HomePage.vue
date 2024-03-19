@@ -27,7 +27,7 @@ export default {
 
 <style scoped>
 .header{
-    height: 6%;
+    height: 5%;
 }
 .screen{
     height: 95%;

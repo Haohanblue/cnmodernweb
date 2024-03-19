@@ -88,17 +88,6 @@ export default {
                 yAxis: {
                     type: 'category',
                 },
-                tooltip: {//背景，提示框
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'line',
-                        z: 0,
-                        lineStyle: {
-                            type: 'solid',//实线
-                            color: '#2D3443'
-                        }
-                    }
-                },
                 series: [
                     {
                         type: 'bar',
@@ -225,7 +214,6 @@ export default {
             }, 3000)
         },
         screenAdapter() {
-            // console.log(this.$refs.seller_ref.offsetWidth)
             this.titleFontsize = this.$refs.seller_ref.offsetWidth / 100 * 5.0
             //和分辨率有关的配置项
             const adapterOption = {

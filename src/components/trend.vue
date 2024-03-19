@@ -42,8 +42,8 @@ export default {
             this.chartInstance = this.$echarts.init(this.$refs.trend_ref, this.theme)
             const initOption = {
                 title: {
-                    text: '『1997年各省现代化指数』',
-                    left: 20,
+                    text: '1997年各省现代化指数',
+                    left: 30,
                     top: 10
                 },
                 tooltip: {
