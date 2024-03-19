@@ -3,11 +3,12 @@
         <header class="screen-header">
             <span class="title">中国现代化大屏展示</span>
             <div class="title-right">
-                <span :class="['iconfont',icon.color ?'icon-taiyang':'icon-yueliang']" @click="changeTheme"></span>
+                <span :class="['iconfont',icon.color ?'icon-taiyang':'icon-yueliang']" @click="changeTheme" style="margin-top: 50px;"></span>
             </div>
         </header>
         <div class="screen-body">
             <section class="screen-left">
+
                 <div id="left-top" :class="[fullScreenStatus.trend ? 'fullscreen' : '']">
                     <trend ref="trend"></trend>
                     <div class="resize">
@@ -17,8 +18,12 @@
                 </div>
 
 
-                <div id="left-bottom">
-                    <!-- 商家销售金额图表 -->
+                <div id="left-bottom" :class="[fullScreenStatus.zujian4 ? 'fullscreen' : '']">
+                    <zujian4 ref="zujian4"></zujian4>
+                    <div class="resize">
+                        <span :class="['iconfont', fullScreenStatus.zujian4 ? 'icon-compress-alt' : 'icon-expand-alt']"
+                        @click="changeSize('zujian4')"></span>
+                    </div>
                 </div>
 
 
@@ -35,11 +40,7 @@
 
 
                 <div id="middle-bottom" :class="[fullScreenStatus.rank ? 'fullscreen' : '']">
-                    <rank ref="rank"></rank>
-                    <div class="resize">
-                        <span :class="['iconfont', fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt']"
-                            @click="changeSize('rank')"></span>
-                    </div>
+                    
                 </div>
             </section>
             <section class="screen-right">
@@ -54,8 +55,12 @@
 
 
 
-                <div id="right-bottom">
-                    <!-- 库存销量分析图表 -->
+                <div id="right-bottom" :class="[fullScreenStatus.rank ? 'fullscreen' : '']">
+                    <rank ref="rank"></rank>
+                    <div class="resize">
+                        <span :class="['iconfont', fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt']"
+                            @click="changeSize('rank')"></span>
+                    </div>
                 </div>
             </section>
         </div>
@@ -67,6 +72,9 @@ import trend from '@/components/trend.vue';
 import seller2 from '@/components/seller2.vue';
 import rank from '@/components/rank.vue';
 import tabBar from "@/components/tabBar.vue";
+import zujian4 from '@/components/zujian4.vue';
+import zujian5 from '@/components/zujian5.vue';
+
 import { mapState } from 'vuex';
 import { getThemeValue } from '@/utils/theme.utils';
 import '@/assets/css2/iconfont.css'
@@ -79,7 +87,9 @@ export default {
                 map: false,
                 rank: false,
                 hot: false,
-                stock: false
+                stock: false,
+                zujian4:false,
+                zujian5:false
             }
         }
     },
@@ -88,7 +98,9 @@ export default {
         seller2,
         rank,
         map2,
-        tabBar
+        tabBar,
+        zujian4,
+        zujian5
     },
     methods: {
         changeSize(chartName) {
@@ -132,8 +144,10 @@ export default {
        url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff?t=1708314494825') format('woff'),
        url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.ttf?t=1708314494825') format('truetype');
 }
+
 .iconfont{
     // font-size: 10px;
+    // margin-top: 5px;
     font-family:"iconfont" !important;
     font-size:25px;font-style:normal;
     -webkit-font-smoothing: antialiased;
@@ -160,7 +174,7 @@ export default {
 
 .screen-header {
     width: 100%;
-    height: 64px;
+    height: 45px;
     font-size: 20px;
     position: relative;
 
@@ -212,12 +226,13 @@ export default {
         width: 27.6%;
 
         #left-top {
-            height: 53%;
+            height: 45%;
             position: relative;
         }
 
         #left-bottom {
-            margin-top: 25px;
+            height: 45%;
+            margin-top: 15px;
             position: relative;
         }
     }
@@ -230,16 +245,16 @@ export default {
 
         #middle-top {
             width: 100%;
-            height: 56%;
+            height: 92%;
             position: relative;
         }
 
-        #middle-bottom {
-            margin-top: 25px;
-            width: 100%;
-            height: 28%;
-            position: relative;
-        }
+        // #middle-bottom {
+        //     margin-top: 25px;
+        //     width: 100%;
+        //     height: 28%;
+        //     position: relative;
+        // }
     }
 
     .screen-right {
@@ -247,13 +262,13 @@ export default {
         width: 27.6%;
 
         #right-top {
-            height: 46%;
+            height: 45%;
             position: relative;
         }
 
         #right-bottom {
-            height: 38%;
-            margin-top: 25px;
+            height: 45%;
+            margin-top: 15px;
             position: relative;
         }
     }

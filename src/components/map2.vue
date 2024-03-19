@@ -61,10 +61,7 @@ export default {
         },
         async getData() {
             const { data: ret } = await this.$http.get('sql/data')
-            // console.log(ret);
             this.rets = ret
-            // this.allData = ret[2].chartData;
-            //-----------------
             this.arrYear = ret.map((year, index) => {
                 return ret[index].year
             })
@@ -74,7 +71,9 @@ export default {
         updateChart() {
             const colorarr = [
                 'red', 'green', 'yellow', 'pink','blue','orange','Aqua','GreenYellow','Salmon',
-                'DeepPink','OrangeRed','LightSeaGreen','DeepSkyBlue'
+                'DeepPink','OrangeRed','LightSeaGreen','DeepSkyBlue','red', 'green', 'yellow', 
+                'pink','blue','orange','Aqua','GreenYellow','Salmon','DeepPink','OrangeRed'
+                
             ]
 
             const dataOption = {

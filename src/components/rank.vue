@@ -11,7 +11,7 @@ export default {
             chartInstance: null,
             allData: null,
             startValue: 0,
-            endValue: 9,
+            endValue: 5,
             timeId: null
         }
     },

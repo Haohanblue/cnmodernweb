@@ -75,11 +75,6 @@ export default {
         initChart() {
             this.chartInstance = this.$echarts.init(this.$refs.seller_ref,this.theme)
             const initOption = {
-                // title: {//标题内容、大小、位置
-                //     text: '『1996年各省现代化指数』',
-                //     left: 20,
-                //     top: 20
-                // },
                 grid: {//对坐标轴进行配置
                     top: '20%',
                     left: '2%',
@@ -179,10 +174,7 @@ export default {
         },
         async getData() {
             const { data: ret } = await this.$http.get('sql/data')//跨域到8888端口获取数据
-            // console.log(ret[0].chartData);
-            // console.log(ret);
             this.rets = ret
-            // console.log(this.rets);
 
             this.allData = ret[5].chartData;//已取到数据
             //可对数据进行处理

@@ -27,10 +27,10 @@ export default {
 
 <style scoped>
 .header{
-    height: 8%;
+    height: 5%;
 }
 .screen{
-    height: 92%;
+    height: 95%;
 }
 .body{
     height: 100%;
