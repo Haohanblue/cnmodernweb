@@ -1,10 +1,14 @@
 <template>
     <div class="com-container">
         <div class="title" :style="titleStyle">
-            <span :style="comStyle">{{ currentYear }}年现代化指数</span>
+            <span :style="comStyle">{{ currentZhibiao }}</span>
+            <!-- comStyle是随着主题变化改变字体颜色 -->
             <span class="iconfont title-icon" @click="showChoice = !showChoice" :style="comStyle">&#xe6eb;</span>
-            <div class="select-con" v-show="showChoice">
-                <div class="select-item" @click="handleSelect(item)" v-for="item in selectfilter">{{ item.year }}年现代化指数</div>
+            <div class="select-con" v-show="showChoice" :style="dropdownStyle">
+                <div class="select-item" 
+                    :style="comStyle"
+                    @click="handleSelect(item)" v-for="item in selectfilter">{{ item }}
+                </div>
             </div>
         </div>
         <div class="com-chart" ref="seller_ref"></div>
@@ -19,23 +23,22 @@ export default {
         return {
             chartInstance: null,
             allData: null,
-            currentPage: 1,
-            totalPage: 0,
             timeId: null,
             showChoice: false,//下拉列表是否出现
             rets: null,//所有数据
+            currentZhibiao:'物质文明和精神文明相协调',
+            zhibiao:['物质文明和精神文明相协调','人口规模巨大','人与自然和谐共生','共同富裕','走和平发展道路'],
             currentYear: '2000',//当前年份
             titleFontsize:0,//给标题设置大小
-            remainPage:0//页面展示除不尽的余数
         }
     },
     computed: {
         selectfilter() {//过滤已选的，不出现在下拉列表中
-            if (!this.rets) {
+            if (!this.zhibiao) {
                 return []
             } else {
-                return this.rets.filter(item=>{
-                    return item.year!==this.currentYear
+                return this.zhibiao.filter(item=>{
+                    return item!==this.currentZhibiao
                 })
             }
         },
@@ -46,8 +49,16 @@ export default {
         },
         comStyle(){   //切换主题
             return{
-                color:getThemeValue(this.theme).titleColor
+                color:getThemeValue(this.theme).titleColor,
+                
             }
+        },
+        dropdownStyle() {
+        // 使用 getThemeValue 函数根据当前主题获取背景颜色
+            const themeValue = getThemeValue(this.theme);
+            return {
+                backgroundColor: themeValue ? themeValue.borderColor : 'defaultBackgroundColor', // 如果没有找到主题，则使用默认背景颜色
+            };
         },
         ...mapState(['theme']),
     },
@@ -57,9 +68,19 @@ export default {
             this.initChart()
             this.screenAdapter()
             this.updateChart()
+            console.log('***********');
+            this.getData()
+            console.log('888888888');
         }
     },
+
     mounted() {
+        this.$bus.$on('year-changed',(newYear)=>{
+            this.currentYear=newYear;
+            // console.log(newYear);
+            // console.log(this.currentYear);
+            this.getData()
+        })
         this.initChart()
         this.getData()
         window.addEventListener('resize', this.screenAdapter),
@@ -70,6 +91,7 @@ export default {
         clearInterval(this.timeId),//取消计时
             //组件销毁，取消监听器
             window.removeEventListener('resize', this.screenAdapter)
+            this.$bus.$off('year-changed');
     },
     methods: {
         initChart() {
@@ -164,31 +186,28 @@ export default {
         async getData() {
             const { data: ret } = await this.$http.get('sql/data')//跨域到8888端口获取数据
             this.rets = ret
+            // console.log(this.currentYear);
+            let year=parseInt(this.currentYear)
+            year=year-2000
+            // console.log(year);
+            this.allData = ret[year].chartData;//已取到数据
 
-            this.allData = ret[5].chartData;//已取到数据
-            //可对数据进行处理
-
-            this.totalPage = parseInt(this.allData.length / 5) //总共设置的页数
-            this.remainPage=this.allData.length - (5 * this.totalPage)//除不尽的余数
             this.updateChart()//更新图表
             this.startInterval()//启动定时器
         },
         updateChart() {
-            const start = (this.currentPage - 1) * 5
-            let end=0
-            if(this.currentPage==this.totalPage){
-                end = this.currentPage * 5+this.remainPage
-            }else{
-                end = this.currentPage * 5
-            }
-
-            const showData = this.allData.slice(start, end)
+            this.allData.sort((a, b) => {
+                return  b.score-a.score;
+            })
+            // 逆序排序+倒转
+            const showData = this.allData.slice(0, 7)
             const sellNames = showData.map((item) => {//x轴数据
                 return item.province
-            })
+            }).reverse()
             const sellerValue = showData.map((item) => {//y轴数据
                 return item.score
-            })
+            }).reverse()
+
             const dataOption = {
                 yAxis: {
                     data: sellNames
@@ -206,12 +225,12 @@ export default {
                 clearInterval(this.timeId)
             }
             this.timeId = setInterval(() => {
-                this.currentPage++
-                if (this.currentPage > this.totalPage) {
-                    this.currentPage = 1
-                }
+                // this.currentPage++
+                // if (this.currentPage > this.totalPage) {
+                //     this.currentPage = 1
+                // }
                 this.updateChart()
-            }, 3000)
+            }, 2500)
         },
         screenAdapter() {
             this.titleFontsize = this.$refs.seller_ref.offsetWidth / 100 * 5.0
@@ -236,12 +255,14 @@ export default {
             this.chartInstance.setOption(adapterOption)
             this.chartInstance.resize()
         },
-        handleSelect(currentInfo) {
-            this.allData = currentInfo.chartData
-            this.currentYear = currentInfo.year
+        handleSelect(currentInfo) {//currentinfo表示当前点击的条目
+            // this.allData = currentInfo.chartData
+            // this.currentYear = currentInfo.year
+            this.currentZhibiao=currentInfo
             this.updateChart()
             this.showChoice = false
-        }
+        },
+        
     }
 }
 </script>
@@ -258,8 +279,8 @@ export default {
         cursor: pointer;
 
     }
-    .select-con{
-        background-color: #303444;
+    .select-item{
+        cursor: pointer;
     }
 }
 </style>
