@@ -2,10 +2,8 @@
     <div class="com-container" >
         <div class="com-chart" ref="map_ref">
         </div>
-       
     </div>
 </template>
-
 <script>
 import axios from 'axios'
 import { mapState } from "vuex"
@@ -17,7 +15,8 @@ export default {
             allData: null,
             arrYear: [],//------存入年份
             rets: null,
-            jsonData:{}
+            jsonData:{},
+            currentYear:'2000'
         }
     },
     mounted() {
@@ -26,6 +25,12 @@ export default {
         window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
         this.$refs['map_ref'].addEventListener('wheel', this.handleMapZoom, { passive: false })// 修改这行，绑定到地图容器
+        this.chartInstance.on('timelinechanged', (params) => {
+            const newYear = this.arrYear[params.currentIndex];
+            this.currentYear = newYear; // 更新组件内部状态
+            this.$bus.$emit('year-changed', newYear); // 使用事件总线通知其他组件年份变化
+        });
+        
     },
     destroyed() {
         window.removeEventListener('reisze', this.screenAdapter)
@@ -78,7 +83,7 @@ export default {
                     data: this.arrYear,
                     axisType: 'category',
                     autoPlay: true,
-                    playInterval: 2000,
+                    playInterval: 2500,
                     left: '8%',
                     right: '2%',
                     width: '80%',
@@ -113,7 +118,11 @@ export default {
                             color: '#aaa',
                             borderColor: '#aaa'
                         }
-                    }
+                    },
+                    onchanged: (timelineIndex) => {
+        const selectedYear = this.arrYear[timelineIndex];
+        this.updateYear(selectedYear);
+    }
                 },
 
                 options: []
@@ -131,6 +140,8 @@ export default {
                     name: data.province,
                     value: data.score
                 }));
+                // this.currentYear=item.year
+                // console.log(this.currentYear);
                 dataOption.options.push({
                     title: {
                         text: item.year + '年各省现代化程度',
@@ -162,7 +173,7 @@ export default {
             const adapterOption = {
                 title: {
                     textStyle: {
-                        fontSize: titleFontsize * 0.05,
+                        fontSize: titleFontsize * 0.08
 
                     }
                 }
@@ -186,6 +197,13 @@ export default {
             }
         });
     },
+    updateYear(year) {
+        console.log(year);
+        this.currentYear = year;
+        // console.log(currentYear);
+        // 发送事件到全局事件总线
+        this.$bus.$emit('year-changed', year);
+    },
     },
     computed: {
         ...mapState(['theme'])
@@ -195,9 +213,16 @@ export default {
             this.chartInstance.dispose()//摧毁实例对象
             this.initChart()//初始化图表
             this.screenAdapter()//分辨率适配
+            
             setTimeout(() => {
                 this.updateChart()
             }, 500);
+            this.updateYear('2000')
+            this.chartInstance.on('timelinechanged', (params) => {
+            const newYear = this.arrYear[params.currentIndex];
+            this.currentYear = newYear; // 更新组件内部状态
+            this.$bus.$emit('year-changed', newYear); // 使用事件总线通知其他组件年份变化
+        });
             // this.updateChart()//加载数据更新图表
         }
     },
