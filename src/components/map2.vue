@@ -62,7 +62,7 @@ export default {
             this.chartInstance.setOption(initOption)
         },
         async getData() {
-            const { data: ret } = await this.$http.get('sql/data')
+            const { data: ret } = await this.$http.get('sql/data/main')
             this.rets = ret
             this.arrYear = ret.map((year, index) => {
                 return ret[index].year

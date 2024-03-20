@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+  <el-tabs class="demo-tabs" >
     <el-tab-pane label="首页" name="first"></el-tab-pane>
     <el-tab-pane label="排行" name="second"></el-tab-pane>
     <el-tab-pane label="成就" name="third"></el-tab-pane>

@@ -85,7 +85,7 @@ export default {
 
         },
         async getData() {
-            const { data: ret } = await this.$http.get('sql/data')
+            const { data: ret } = await this.$http.get('sql/data/main')
             // console.log(ret[1].chartData);
             this.allData = ret[5].chartData;
             this.updateChart()

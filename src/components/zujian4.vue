@@ -142,7 +142,7 @@ import { getThemeValue } from '@/utils/theme.utils'
             })
             },
             async getData(){
-                const { data: ret } = await this.$http.get('sql/data')
+                const { data: ret } = await this.$http.get('sql/data/main')
                 this.rets = ret
 
                 this.allData = ret[6].chartData;//已取到数据

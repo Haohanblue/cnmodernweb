@@ -184,7 +184,7 @@ export default {
             })
         },
         async getData() {
-            const { data: ret } = await this.$http.get('sql/data')//跨域到8888端口获取数据
+            const { data: ret } = await this.$http.get('sql/data/main')//跨域到8888端口获取数据
             this.rets = ret
             // console.log(this.currentYear);
             let year=parseInt(this.currentYear)
