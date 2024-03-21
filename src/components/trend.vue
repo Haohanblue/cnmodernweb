@@ -36,6 +36,7 @@ export default {
     destroyed() {
         window.removeEventListener('reisze', this.screenAdapter)
         clearInterval(this.timeId)
+        this.$bus.$off('dataReceived')
     },
     methods: {
         initChart() {
@@ -84,12 +85,12 @@ export default {
             this.chartInstance.setOption(initOption)
 
         },
-        async getData() {
-            const { data: ret } = await this.$http.get('sql/data/main')
-            // console.log(ret[1].chartData);
-            this.allData = ret[5].chartData;
-            this.updateChart()
-            this.startInterval()
+        getData() {
+            this.$bus.$on('dataReceived', (data) => {
+                this.allData = data.rets[5].chartData
+                this.updateChart()
+                this.startInterval()
+            })
         },
         updateChart() {
             //x轴，y轴数据

@@ -92,6 +92,7 @@ export default {
             //组件销毁，取消监听器
             window.removeEventListener('resize', this.screenAdapter)
             this.$bus.$off('year-changed');
+            this.$bus.$off('dataReceived');
     },
     methods: {
         initChart() {
@@ -184,16 +185,14 @@ export default {
             })
         },
         async getData() {
-            const { data: ret } = await this.$http.get('sql/data/main')//跨域到8888端口获取数据
-            this.rets = ret
-            // console.log(this.currentYear);
-            let year=parseInt(this.currentYear)
-            year=year-2000
-            // console.log(year);
-            this.allData = ret[year].chartData;//已取到数据
-
-            this.updateChart()//更新图表
-            this.startInterval()//启动定时器
+            this.$bus.$on('dataReceived', (data) => {
+                this.rets = data.rets
+                let year=parseInt(this.currentYear)
+                year=year-2000
+                this.allData = this.rets[year].chartData;//已取到数据
+                this.updateChart()
+                this.startInterval()//启动定时器
+            })
         },
         updateChart() {
             this.allData.sort((a, b) => {

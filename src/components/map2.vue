@@ -9,6 +9,9 @@ import axios from 'axios'
 import { mapState } from "vuex"
 const BASEURL = require('../../config/config.json').BASEURL;
 export default {
+    beforeDestroy() {
+        this.$bus.$off('dataReceived')
+    },
     data() {
         return {
             chartInstance: null,
@@ -61,14 +64,12 @@ export default {
             }
             this.chartInstance.setOption(initOption)
         },
-        async getData() {
-            const { data: ret } = await this.$http.get('sql/data/main')
-            this.rets = ret
-            this.arrYear = ret.map((year, index) => {
-                return ret[index].year
+        getData() {
+            this.$bus.$on('dataReceived', (data) => {
+                this.rets = data.rets
+                this.arrYear = data.arrYear
+                this.updateChart()
             })
-
-            this.updateChart()
         },
         updateChart() {
             const colorarr = [

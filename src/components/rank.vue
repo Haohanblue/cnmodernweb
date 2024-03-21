@@ -6,6 +6,9 @@
 <script>
 import { mapState } from "vuex";
 export default {
+    beforeDestroy() {
+        this.$bus.$off('dataReceived')
+    },
     data() {
         return {
             chartInstance: null,
@@ -78,15 +81,12 @@ export default {
                 this.startInterval()
             })
         },
-        async getData() {
-            // 获取服务器的数据, 对this.allData进行赋值之后, 调用updateChart方法更新图表
-            const { data: ret } = await this.$http.get('sql/data/main')
-            // console.log(ret);
-            // console.log(ret[3].chartData);
-            this.allData = ret[4].chartData;
-            // console.log(ret[4]);
-            this.updateChart()
-            this.startInterval()
+        getData() {
+            this.$bus.$on('dataReceived', (data) => {
+                this.allData = data.rets[4].chartData
+                this.updateChart()
+                this.startInterval()
+            })
         },
         updateChart() {
             const namearr = this.allData.map((item) => {

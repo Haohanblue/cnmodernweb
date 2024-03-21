@@ -79,6 +79,16 @@ import { mapState } from 'vuex';
 import { getThemeValue } from '@/utils/theme.utils';
 import '@/assets/css2/iconfont.css'
 export default {
+    async created() {
+    const { data: ret } = await this.$http.get('sql/data/main');
+    this.rets = ret;
+    this.arrYear = ret.map((year, index) => {
+      return ret[index].year;
+    });
+
+    // 发送事件和数据
+    this.$bus.$emit('dataReceived', { rets: this.rets, arrYear: this.arrYear });
+  },
     data() {
         return {
             fullScreenStatus: {
@@ -89,7 +99,9 @@ export default {
                 hot: false,
                 stock: false,
                 zujian4:false,
-                zujian5:false
+                zujian5:false,
+                rets: null,
+                arrYear: [],
             }
         }
     },
