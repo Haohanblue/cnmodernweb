@@ -3,7 +3,8 @@
         <header class="screen-header">
             <span class="title">中国现代化大屏展示</span>
             <div class="title-right">
-                <span :class="['iconfont',icon.color ?'icon-taiyang':'icon-yueliang']" @click="changeTheme" style="margin-top: 50px;"></span>
+                <span :class="['iconfont', icon.color ? 'icon-taiyang' : 'icon-yueliang']" @click="changeTheme"
+                    style="margin-top: 50px;"></span>
             </div>
         </header>
         <div class="screen-body">
@@ -13,7 +14,7 @@
                     <trend ref="trend"></trend>
                     <div class="resize">
                         <span :class="['iconfont', fullScreenStatus.trend ? 'icon-compress-alt' : 'icon-expand-alt']"
-                        @click="changeSize('trend')"></span>
+                            @click="changeSize('trend')"></span>
                     </div>
                 </div>
 
@@ -22,7 +23,7 @@
                     <zujian4 ref="zujian4"></zujian4>
                     <div class="resize">
                         <span :class="['iconfont', fullScreenStatus.zujian4 ? 'icon-compress-alt' : 'icon-expand-alt']"
-                        @click="changeSize('zujian4')"></span>
+                            @click="changeSize('zujian4')"></span>
                     </div>
                 </div>
 
@@ -40,7 +41,7 @@
 
 
                 <div id="middle-bottom" :class="[fullScreenStatus.rank ? 'fullscreen' : '']">
-                    
+
                 </div>
             </section>
             <section class="screen-right">
@@ -80,15 +81,20 @@ import { getThemeValue } from '@/utils/theme.utils';
 import '@/assets/css2/iconfont.css'
 export default {
     async created() {
-    const { data: ret } = await this.$http.get('sql/data/main');
-    this.rets = ret;
-    this.arrYear = ret.map((year, index) => {
-      return ret[index].year;
-    });
 
-    // 发送事件和数据
-    this.$bus.$emit('dataReceived', { rets: this.rets, arrYear: this.arrYear });
-  },
+        const { data: ret } = await this.$http.get('sql/data/main');
+        this.rets = ret;
+        this.arrYear = ret.map((year, index) => {
+            return ret[index].year;
+        });
+
+        const{data:ret2}=await this.$http.get('sql/data/area');
+        this.retArea=ret2
+
+        // 发送事件和数据
+        this.$bus.$emit('dataArea',this.retArea);
+        this.$bus.$emit('dataReceived', { rets: this.rets, arrYear: this.arrYear });
+    },
     data() {
         return {
             fullScreenStatus: {
@@ -98,9 +104,10 @@ export default {
                 rank: false,
                 hot: false,
                 stock: false,
-                zujian4:false,
-                zujian5:false,
+                zujian4: false,
+                zujian5: false,
                 rets: null,
+                retArea:null,
                 arrYear: [],
             }
         }
@@ -128,20 +135,20 @@ export default {
                 this.$refs[chartName].screenAdapter()
             })
         },
-        changeTheme(){
+        changeTheme() {
             this.$store.commit('changeTheme')
         }
     },
-    computed:{
-        icon(){   //切换icon图标
-            return{
-                color:getThemeValue(this.theme).iconfont
+    computed: {
+        icon() {   //切换icon图标
+            return {
+                color: getThemeValue(this.theme).iconfont
             }
         },
-        containerStyle(){
-            return{
-                backgroundColor:getThemeValue(this.theme).backgroundColor,
-                color:getThemeValue(this.theme).titleColor
+        containerStyle() {
+            return {
+                backgroundColor: getThemeValue(this.theme).backgroundColor,
+                color: getThemeValue(this.theme).titleColor
             }
         },
         ...mapState(['theme']),
@@ -151,20 +158,24 @@ export default {
 <style lang="less" scoped>
 /* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-  font-family: 'iconfont';  /* Project id 4436678 */
-  src: url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff2?t=1708314494825') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff?t=1708314494825') format('woff'),
-       url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.ttf?t=1708314494825') format('truetype');
+    font-family: 'iconfont';
+    /* Project id 4436678 */
+    src: url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff2?t=1708314494825') format('woff2'),
+        url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff?t=1708314494825') format('woff'),
+        url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.ttf?t=1708314494825') format('truetype');
 }
 
-.iconfont{
+.iconfont {
     // font-size: 10px;
     // margin-top: 5px;
-    font-family:"iconfont" !important;
-    font-size:25px;font-style:normal;
+    font-family: "iconfont" !important;
+    font-size: 25px;
+    font-style: normal;
     -webkit-font-smoothing: antialiased;
     -webkit-text-stroke-width: 0.2px;
-    -moz-osx-font-smoothing: grayscale;}
+    -moz-osx-font-smoothing: grayscale;
+}
+
 .fullscreen {
     position: fixed !important;
     top: 0 !important;
@@ -291,4 +302,5 @@ export default {
     top: 20px;
     right: 20px;
     cursor: pointer;
-}</style>
+}
+</style>
