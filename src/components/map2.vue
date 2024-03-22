@@ -5,14 +5,19 @@
     </div>
 </template>
 <script>
+import { getProvinceMapInfo } from '@/utils/map_utils';
 import axios from 'axios'
 import { mapState } from "vuex"
 const BASEURL = require('../../config/config.json').BASEURL;
 export default {
+    beforeDestroy() {
+        this.$bus.$off('dataReceived')
+    },
     data() {
         return {
             chartInstance: null,
             allData: null,
+            mapData:[],//缓存省份地图数据
             arrYear: [],//------存入年份
             rets: null,
             jsonData:{},
@@ -60,15 +65,26 @@ export default {
                 }
             }
             this.chartInstance.setOption(initOption)
-        },
-        async getData() {
-            const { data: ret } = await this.$http.get('sql/data/main')
-            this.rets = ret
-            this.arrYear = ret.map((year, index) => {
-                return ret[index].year
+            this.chartInstance.on('dblclick',async(arg)=>{
+                console.log(arg.name);
+                // const provinceInfo=getProvinceMapInfo(arg.name)
+                // console.log(provinceInfo);
+                //判断当前点击的省份的地图矢量数据是否存在
+                // if(!this.mapData[provinceInfo.key]){
+                //     const ret=await axios.get(BASEURL + provinceInfo.path)
+                //     this.mapData[provinceInfo.key] = ret.data
+                //     // console.log(ret);
+                //     this.$echarts.registerMap(provinceInfo.key, ret.data)
+                // }
+                this.$bus.$emit('province-change',arg.name);
             })
-
-            this.updateChart()
+        },
+        getData() {
+            this.$bus.$on('dataReceived', (data) => {
+                this.rets = data.rets
+                this.arrYear = data.arrYear
+                this.updateChart()
+            })
         },
         updateChart() {
             const colorarr = [

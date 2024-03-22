@@ -45,6 +45,7 @@ import { getThemeValue } from '@/utils/theme.utils'
         destroyed(){
             clearInterval(this.timeId)
             window.removeEventListener('resize',this.screenAdapter)
+            this.$bus.$off('dataReceived')
         },
         methods:{
             initChart(){
@@ -141,17 +142,22 @@ import { getThemeValue } from '@/utils/theme.utils'
                 this.startInterval()
             })
             },
-            async getData(){
-                const { data: ret } = await this.$http.get('sql/data/main')
-                this.rets = ret
+            getData(){
+                this.$bus.$on('dataReceived', (data) => {
+                    this.rets = data.rets
+                    this.allData = data.rets[6].chartData;//已取到数据
+                    //可对数据进行处理
 
-                this.allData = ret[6].chartData;//已取到数据
-            //可对数据进行处理
+                    this.totalPage = parseInt(this.allData.length / 5) //总共设置的页数
+                    this.remainPage=this.allData.length - (5 * this.totalPage)//除不尽的余数
+                    this.updateChart()//更新图表
+                    this.startInterval()//启动定时器
+                })
+               
+                
 
-                this.totalPage = parseInt(this.allData.length / 5) //总共设置的页数
-                this.remainPage=this.allData.length - (5 * this.totalPage)//除不尽的余数
-                this.updateChart()//更新图表
-                this.startInterval()//启动定时器
+               
+ 
             },
             updateChart(){
                 const start = (this.currentPage - 1) * 5
