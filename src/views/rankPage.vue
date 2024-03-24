@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import Rank from '@/components/rank'
+import Rank from '@/components/home/rank.vue'
 export default {
     data() {
         return {}

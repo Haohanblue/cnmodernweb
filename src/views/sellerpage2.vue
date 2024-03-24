@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import seller2 from '@/components/seller2.vue';
+import seller2 from '@/components/home/seller2.vue';
 export default {
   data () {
     return {}

@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import trend from '@/components/trend.vue'
+import trend from '@/components/home/trend.vue'
 export default{
     data(){
         return{

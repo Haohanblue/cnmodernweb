@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import zujian5 from '@/components/zujian5.vue'
+import zujian5 from '@/components/home/zujian5.vue'
 export default{
     data(){
         return {}

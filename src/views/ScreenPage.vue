@@ -68,13 +68,13 @@
     </div>
 </template>
 <script>
-import map2 from '@/components/map2.vue';
-import trend from '@/components/trend.vue';
-import seller2 from '@/components/seller2.vue';
-import rank from '@/components/rank.vue';
+import map2 from '@/components/home/map2.vue';
+import trend from '@/components/home/trend.vue';
+import seller2 from '@/components/home/seller2.vue';
+import rank from '@/components/home/rank.vue';
 import tabBar from "@/components/tabBar.vue";
-import zujian4 from '@/components/zujian4.vue';
-import zujian5 from '@/components/zujian5.vue';
+import zujian4 from '@/components/home/zujian4.vue';
+import zujian5 from '@/components/home/zujian5.vue';
 
 import { mapState } from 'vuex';
 import { getThemeValue } from '@/utils/theme.utils';
@@ -188,7 +188,7 @@ export default {
 
 .screen-container {
     width: 100%;
-    height: 100%;
+    height: 95%;
     padding: 0 20px;
     background-color: #161522;
     color: #fff;
@@ -205,7 +205,8 @@ export default {
     .title {
         position: absolute;
         left: 50%;
-        top: 50%;
+        top:30%;
+        bottom: 20%;
         font-size: 20px;
         transform: translate(-50%, -50%);
     }

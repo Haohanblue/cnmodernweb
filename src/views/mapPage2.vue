@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import map2 from '@/components/map2.vue';
+import map2 from '@/components/home/map2.vue';
 export default {
     data() {
         return {

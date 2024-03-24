@@ -6,50 +6,66 @@ import TrendPage from '@/views/TrendPage'
 import mapPage2 from '@/views/mapPage2'
 import rankPage from'@/views/rankPage'
 import ScreenPage from '@/views/ScreenPage'
-import HomePage from "@/views/HomePage.vue"
 import zujian4Page from '@/views/zujian4Page.vue'
 import zujian5Page from '@/views/zujian5Page.vue'
+import DataPage from '@/views/DataPage.vue'
+import BillboardPage from "@/views/BillboardPage.vue";
+import AchievementPage from "@/views/AchievementPage.vue";
 
 
 Vue.use(VueRouter)
 
 const routes = [
-  {path:'/home',
-  component: HomePage
-  },
   {
     path:'/',
-    redirect:'/home'
+    redirect:'/screen'
   },
   {
     path:'/screen',
-    component:ScreenPage
+    component:ScreenPage,
+    keepAlive: true,
+    children:[
+      {
+        path: '/sellerpage2',
+        component: SellerPage2,
+        keepAlive: true,
+      },
+      {
+        path: '/trendpage',
+        component: TrendPage,
+        keepAlive: true,
+      },
+      {
+        path: '/mappage2',
+        component: mapPage2,
+        keepAlive: true,
+      },
+      {
+        path: '/rankpage',
+        component: rankPage,
+        keepAlive: true,
+      },
+      {
+        path:'/zujian4page',
+        component:zujian4Page,
+        keepAlive: true,
+      },
+      {
+        path:'/zujian5',
+        component:zujian5Page,
+        keepAlive: true,
+      },
+    ]
   },
-  {
-    path: '/sellerpage2',
-    component: SellerPage2
+  {path:'/billboard',
+  component: BillboardPage
   },
-  {
-    path: '/trendpage',
-    component: TrendPage
+  {path:'/data',
+  component: DataPage
   },
-
-  {
-    path: '/mappage2',
-    component: mapPage2
+  {path:'/achievement',
+  component: AchievementPage
   },
-  {
-    path: '/rankpage',
-    component: rankPage
-  },
-  {
-    path:'/zujian4page',
-    component:zujian4Page
-  },
-  {
-    path:'/zujian5',
-    component:zujian5Page
-  }
 ]
 
 const router = new VueRouter({
