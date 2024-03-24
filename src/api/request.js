@@ -9,7 +9,7 @@ export function getRankingsByYear(year) {
             throw error;
         });
 }
-export function getOriginalData(province, year) {
+export function getOriginalData(province, year,columns) {
     // 创建一个 URLSearchParams 对象
     let params = new URLSearchParams();
     // 添加参数
