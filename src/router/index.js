@@ -22,40 +22,7 @@ const routes = [
   },
   {
     path:'/screen',
-    component:ScreenPage,
-    keepAlive: true,
-    children:[
-      {
-        path: '/sellerpage2',
-        component: SellerPage2,
-        keepAlive: true,
-      },
-      {
-        path: '/trendpage',
-        component: TrendPage,
-        keepAlive: true,
-      },
-      {
-        path: '/mappage2',
-        component: mapPage2,
-        keepAlive: true,
-      },
-      {
-        path: '/rankpage',
-        component: rankPage,
-        keepAlive: true,
-      },
-      {
-        path:'/zujian4page',
-        component:zujian4Page,
-        keepAlive: true,
-      },
-      {
-        path:'/zujian5',
-        component:zujian5Page,
-        keepAlive: true,
-      },
-    ]
+    component:ScreenPage
   },
   {path:'/billboard',
   component: BillboardPage
