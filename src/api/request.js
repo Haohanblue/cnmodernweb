@@ -10,7 +10,14 @@ export function getRankingsByYear(year) {
         });
 }
 export function getOriginalData(province, year) {
-    const url = `${AXIOSURL}/sql/data/source/${year}/${province}`;
+    // 创建一个 URLSearchParams 对象
+    let params = new URLSearchParams();
+    // 添加参数
+    if (year) params.append('year', year);
+    if (province) params.append('province', province);
+    if (columns) params.append('columns', columns);
+    // 创建 URL
+    const url = `${AXIOSURL}/sql/data/source?${params.toString()}`;
     return axios.get(url)
         .then(response => response.data)
         .catch(error => {
@@ -20,8 +27,47 @@ export function getOriginalData(province, year) {
 }
 
 // 查询填充后的数据的接口
-export function getFilledData(province, year) {
-    const url = `${AXIOSURL}/sql/data/filled/${year}/${province}`;
+export function getFilledData(province, year, columns) {
+    // 创建一个 URLSearchParams 对象
+    let params = new URLSearchParams();
+    // 添加参数
+    if (year) params.append('year', year);
+    if (province) params.append('province', province);
+    if (columns) params.append('columns', columns);
+    // 创建 URL
+    const url = `${AXIOSURL}/sql/data/filled?${params.toString()}`;
+    return axios.get(url)
+        .then(response => response.data)
+        .catch(error => {
+            console.error(error);
+            throw error;
+        });
+}
+export function downloadOriginalData(province, year, columns) {
+    // 创建一个 URLSearchParams 对象
+    let params = new URLSearchParams();
+    // 添加参数
+    if (year) params.append('year', year);
+    if (province) params.append('province', province);
+    if (columns) params.append('columns', columns);
+    // 创建 URL
+    const url = `${AXIOSURL}/sql/download/source?${params.toString()}`;
+    return axios.get(url)
+        .then(response => response.data)
+        .catch(error => {
+            console.error(error);
+            throw error;
+        });
+}
+export function downloadFilledData(province, year, columns) {
+    // 创建一个 URLSearchParams 对象
+    let params = new URLSearchParams();
+    // 添加参数
+    if (year) params.append('year', year);
+    if (province) params.append('province', province);
+    if (columns) params.append('columns', columns);
+    // 创建 URL
+    const url = `${AXIOSURL}/sql/download/filled?${params.toString()}`;
     return axios.get(url)
         .then(response => response.data)
         .catch(error => {
