@@ -13,14 +13,15 @@
             </el-select>
             </div>
         </div>
-        <el-tabs type="border-card" class="tabs">
-
-            <el-tab-pane v-for="(item, index) in billboardData" :key="index" :label="item.label" >
+        <el-tabs type="border-card" class="tabs" stretch @tab-click="handleTabClick">
+            <el-tab-pane v-for="(item, index) in billboardData" :key="index" :label="item.label" lazy >
                 <el-table class="el-table"
                     :data="item.data"
                     stripe
                     style="width: 100%"
-                    height="470">
+                          height="470"
+                    fit :header-cell-style="{textAlign: 'center'}"
+                          :cell-style="{ textAlign: 'center' }">
                     <el-table-column
                         prop="year"
                         label="年份"
@@ -54,6 +55,7 @@ export default {
     name: "BillboardPage",
     data() {
         return {
+            Current_list: [],
             Tlist: [],
             Alist: [],
             Blist: [],
@@ -69,27 +71,27 @@ export default {
             return [
                 {
                     label: '总得分',
-                    data: this.Tlist
+                    data: this.Current_list
                 },
                 {
                     label: '人口规模巨大的现代化',
-                    data: this.Alist
+                    data: this.Current_list
                 },
                 {
                     label: '共同富裕的现代化',
-                    data: this.Blist
+                    data: this.Current_list
                 },
                 {
                     label: '物质文明与精神文明相协调的现代化',
-                    data: this.Clist
+                    data: this.Current_list
                 },
                 {
                     label: '人与自然和谐共生的现代化',
-                    data: this.Dlist
+                    data: this.Current_list
                 },
                 {
                     label: '走和平发展道路的现代化',
-                    data: this.Elist
+                    data: this.Current_list
                 },
                 // 其他的排行榜数据
             ]
@@ -138,7 +140,7 @@ export default {
                             value: item.E,
                             rank: item.E_rank
                         })).sort(this.compare);
-
+                        this.Current_list = this.Tlist
                     })
                     .catch(error => {
                         console.error(error);
@@ -147,6 +149,29 @@ export default {
         },
     },
     methods: {
+        handleTabClick(tab) {
+            let index = tab.paneName
+            switch (index) {
+                case '0':
+                    this.Current_list = this.Tlist
+                    break;
+                case '1':
+                    this.Current_list = this.Alist
+                    break;
+                case '2':
+                    this.Current_list = this.Blist
+                    break;
+                case '3':
+                    this.Current_list = this.Clist
+                    break;
+                case '4':
+                    this.Current_list = this.Dlist
+                    break;
+                case '5':
+                    this.Current_list = this.Elist
+                    break;
+            }
+        },
         compare(a, b) {
             if (a.rank < b.rank) {
                 return -1;
@@ -160,13 +185,17 @@ export default {
 }
 </script>
 <style scoped>
+
 .billboard {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 10px;
+    padding-left: 100px;
+    padding-right: 100px;
     background-color: #f5f5f5;
+
 }
 
 .header {
@@ -186,6 +215,13 @@ export default {
 .tabs {
     width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; /* 添加这一行 */
+}
+.el-table,
+.el-table-column {
+    text-align: center;
 }
 
 </style>
