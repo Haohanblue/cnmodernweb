@@ -13,8 +13,8 @@ export function getOriginalData(province, year,columns) {
     // 创建一个 URLSearchParams 对象
     let params = new URLSearchParams();
     // 添加参数
-    if (year) params.append('year', year);
-    if (province) params.append('province', province);
+    if (year) params.append('year', year.join(','));
+    if (province) params.append('province', province.join(','));
     if (columns) params.append('columns', columns);
     // 创建 URL
     const url = `${AXIOSURL}/sql/data/source?${params.toString()}`;
@@ -31,8 +31,8 @@ export function getFilledData(province, year, columns) {
     // 创建一个 URLSearchParams 对象
     let params = new URLSearchParams();
     // 添加参数
-    if (year) params.append('year', year);
-    if (province) params.append('province', province);
+    if (year) params.append('year', year.join(','));
+    if (province) params.append('province', province.join(','));
     if (columns) params.append('columns', columns);
     // 创建 URL
     const url = `${AXIOSURL}/sql/data/filled?${params.toString()}`;
@@ -47,12 +47,12 @@ export function downloadOriginalData(province, year, columns) {
     // 创建一个 URLSearchParams 对象
     let params = new URLSearchParams();
     // 添加参数
-    if (year) params.append('year', year);
-    if (province) params.append('province', province);
+    if (year) params.append('year', year.join(','));
+    if (province) params.append('province', province.join(','));
     if (columns) params.append('columns', columns);
     // 创建 URL
     const url = `${AXIOSURL}/sql/download/source?${params.toString()}`;
-    return axios.get(url)
+    return axios.get(url, { responseType: 'blob' })
         .then(response => response.data)
         .catch(error => {
             console.error(error);
@@ -63,12 +63,12 @@ export function downloadFilledData(province, year, columns) {
     // 创建一个 URLSearchParams 对象
     let params = new URLSearchParams();
     // 添加参数
-    if (year) params.append('year', year);
-    if (province) params.append('province', province);
+    if (year) params.append('year', year.join(','));
+    if (province) params.append('province', province.join(','));
     if (columns) params.append('columns', columns);
     // 创建 URL
     const url = `${AXIOSURL}/sql/download/filled?${params.toString()}`;
-    return axios.get(url)
+    return axios.get(url, { responseType: 'blob' })
         .then(response => response.data)
         .catch(error => {
             console.error(error);
