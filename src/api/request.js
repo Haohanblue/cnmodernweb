@@ -52,7 +52,7 @@ export function downloadOriginalData(province, year, columns) {
     if (columns) params.append('columns', columns);
     // 创建 URL
     const url = `${AXIOSURL}/sql/download/source?${params.toString()}`;
-    return axios.get(url)
+    return axios.get(url, { responseType: 'blob' })
         .then(response => response.data)
         .catch(error => {
             console.error(error);
@@ -68,7 +68,7 @@ export function downloadFilledData(province, year, columns) {
     if (columns) params.append('columns', columns);
     // 创建 URL
     const url = `${AXIOSURL}/sql/download/filled?${params.toString()}`;
-    return axios.get(url)
+    return axios.get(url, { responseType: 'blob' })
         .then(response => response.data)
         .catch(error => {
             console.error(error);

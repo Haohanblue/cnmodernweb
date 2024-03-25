@@ -5,8 +5,8 @@
                 <header class="header">
                 <h2>数据查询</h2>
                     <div class="right">
-                        <el-button type="primary" icon="el-icon-search" size="mini" @click="queryData">查询</el-button>
-                        <el-button type="primary" size="mini" style="margin-right: 10px">下载<i class="el-icon-download el-icon--right"></i></el-button>
+                        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
+                        <el-button type="primary" size="mini" style="margin-right: 10px" @click="handleDownload">下载<i class="el-icon-download el-icon--right"></i></el-button>
                         <el-switch
                             style="display: block"
                             v-model="isQueryFilled"
@@ -52,37 +52,31 @@
                                             <span style="font-size: 12px"><el-input class="el-input" style="width: 75px" size="mini"  v-model="startYear" type="number" :min="2000" :max="2023"></el-input> 开始年份</span>
                                             <span style="font-size: 12px">结束年份 <el-input class="el-input" style="width: 75px" size="mini" v-model="endYear" type="number" :min="2000" :max="2023"></el-input></span>
                                         </div>
-
                                         <el-slider style="width: 80%" v-model="selectedYears" range show-input-controls show-stops :min="2000" :max="2023"></el-slider>
-
                                     </div>
                                 </el-collapse-item>
                             </el-col>
                         </el-collapse>
                 </el-row>
-                <div class="table" style="height: 300px; overflow: auto;">
-                    <el-table :data="viewData" style="width: 100%" :span-method="headerSpanMethod" height="500">
-                        <el-table-column v-if="isQueryed"
-                                         prop="province"
-                                         label="省份"
-                                         width="60">
-                        </el-table-column>
-                        <el-table-column v-if="isQueryed"
-                                         prop="year"
-                                         label="年份"
-                                         width="60">
-                        </el-table-column>
+                <div class="table">
+                    <el-table :data="viewData" style="width: 100%" height="550"
+                              fit :header-cell-style="{textAlign: 'center'}"
+                              :cell-style="{ textAlign: 'center' }">
                         <el-table-column
-                            v-for="(header, index) in filteredHeaders"
+                            v-for="(fatherLabel, index) in uniqueFatherLabels"
                             :key="index"
-                            :label="`${header.fatherLabel}`">
+                            :label="fatherLabel"
+                            width="200">
                             <el-table-column
-                                :prop="viewData"
-                                :label="`${header.label} (${header.unit})`"
+
+                                v-for="(value, key, index) in viewData[0]"
+                                v-if="getFatherLabel(key) === fatherLabel"
+                                :key="index"
+                                :label="getColumnLabel(key)"
+                                :prop="key"
+                                sortable
+                                :default-sort = "{prop: 'province', order: 'descending'}"
                                 width="200">
-                                <template slot-scope="scope">
-                                    {{ scope.row[header.value] }}
-                                </template>
                             </el-table-column>
                         </el-table-column>
                     </el-table>
@@ -92,9 +86,8 @@
             </el-row>
     </div>
 </template>
-
 <script>
-import { getOriginalData, getFilledData } from '../../api/request.js';
+import {getOriginalData, getFilledData, downloadOriginalData, downloadFilledData} from '../../api/request.js';
 import { options,indicators,indicatorWithUnit } from '../dict/dict.js';
 
 export default {
@@ -126,6 +119,11 @@ export default {
         }
     },
     computed: {
+        uniqueFatherLabels() {
+            const labels = this.filteredHeaders.map(header => header.fatherLabel);
+            return [...new Set(labels)];
+        },
+
         selectedYears:{
             get(){
                 return [this.startYear, this.endYear];
@@ -137,23 +135,28 @@ export default {
         }
     },
     methods: {
-        headerSpanMethod({ row, column, rowIndex, columnIndex }) {
-            if (columnIndex === 0 || columnIndex === 1) {
-                return [1, 1];
+        getFatherLabel(key) {
+            const headerObj = this.headers.find(header => header.value === key);
+            if (headerObj && headerObj.fatherLabel) {
+                return headerObj.fatherLabel;
             }
-            let sameFatherLabelCount = this.filteredHeaders.filter(header => header.fatherLabel === column.label).length;
-            if (columnIndex % sameFatherLabelCount === 0) {
-                return [1, sameFatherLabelCount];
+            return '';
+        },
+        getColumnLabel(key) {
+            const headerObj = this.headers.find(header => header.value === key);
+            if (!headerObj) {
+                return key;
+            }
+            if (headerObj.unit) {
+                return `${headerObj.label}(${headerObj.unit})`;
             } else {
-                return [0, 0];
+                return `${headerObj.label}`
             }
         },
-        filtHead() {
+        filterHead() {
             this.filteredHeaders = this.headers.filter(header => this.viewData.some(row => row[header.value] !== undefined));
         },
-
-
-        queryData() {
+        queryData(type) {
             let columns = this.selectedIndicators.map(indicator => indicator[1])
             let province = this.selectedProvinces
             let year = Array.from({length: this.endYear - this.startYear + 1}, (_, i) => this.startYear + i);
@@ -164,16 +167,26 @@ export default {
                     message: '请至少选中一个指标'
                 });
                 return;
-            }if (province.length === 0) {
+            }
+            if (province.length === 0) {
                 this.$message({
                     type: 'warning',
                     message: '请至少选中一个省份'
                 });
                 return;
             }
-            this.fetchData(province,year,columns,dataType)
+            if (type === 'query') {
+                this.fetchData(province, year, columns, dataType)
+            } else if (type === 'download') {
+                this.downloadData(province, year, columns, dataType)
+            }
         },
-
+        handleQuery() {
+            this.queryData('query');
+        },
+        handleDownload() {
+            this.queryData('download');
+        },
         //处理第一个手风琴的全选
         handleCheckAllChange(val) {
             this.selectedProvinces = val ? this.provinces : [];
@@ -184,26 +197,52 @@ export default {
             this.isIndeterminate = checkedCount > 0 && checkedCount < this.provinces.length;
         },
         //处理查询数据
-        fetchData(province,year,columns,dataType) {
+        fetchData(province, year, columns, dataType) {
             console.log("开始查了")
             const fetchDataFunc = dataType === 'original' ? getOriginalData : getFilledData;
-            fetchDataFunc(province, year,columns)
+            fetchDataFunc(province, year, columns)
                 .then(data => {
                     this.viewData = data;
-                    this.filtHead();
+                    this.filterHead();
                     this.isQueryed = true;
-                    console.log(this.viewData)
-                    console.log(this.headers)
                 })
                 .catch(error => {
                     console.error(error);
                 });
         },
-        //处理下载数据
-        downloadData() {
-        },
+
+        downloadData(province, year, columns, dataType) {
+            const fetchDataFunc = dataType === 'original' ? downloadOriginalData : downloadFilledData;
+            fetchDataFunc(province, year, columns)
+                .then(blob => {
+                    // 创建一个下载链接
+                    const url = window.URL.createObjectURL(blob);
+
+                    // 创建一个隐藏的 a 标签，设置 href 为下载链接
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `${dataType}_data.xlsx`; // 设置下载文件的名称
+
+                    // 将 a 标签添加到 body 中
+                    document.body.appendChild(a);
+
+                    // 触发 a 标签的点击事件，开始下载
+                    a.click();
+
+                    // 下载完成后，移除 a 标签
+                    document.body.removeChild(a);
+
+                    // 释放 URL 对象
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     },
 }
+
 </script>
 
 <style scoped>

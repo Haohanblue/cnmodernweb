@@ -255,6 +255,16 @@ export let options = [
 
 export let indicatorWithUnit = [
     {
+        "value": "province",
+        "label":"省份",
+        "fatherLabel": "省份",
+    },
+    {
+        "value": "year",
+        "label": "年份",
+        "fatherLabel": "年份",
+    },
+    {
         "value": "A1",
         "label": "常住人口出生率",
         "fatherValue": "A",
@@ -561,5 +571,6 @@ export let indicatorWithUnit = [
         "fatherValue": "E",
         "fatherLabel": "走和平发展道路的现代化",
         "unit": "美元/人"
-    }
+    },
+
 ]
