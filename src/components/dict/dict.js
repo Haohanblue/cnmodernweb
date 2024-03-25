@@ -253,3 +253,313 @@ export let options = [
     }
 ]
 
+export let indicatorWithUnit = [
+    {
+        "value": "A1",
+        "label": "常住人口出生率",
+        "fatherValue": "A",
+        "fatherLabel": "人口规模巨大的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "A2",
+        "label": "常住人口死亡率",
+        "fatherValue": "A",
+        "fatherLabel": "人口规模巨大的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "A3",
+        "label": "常住人口自然增长率",
+        "fatherValue": "A",
+        "fatherLabel": "人口规模巨大的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "A4",
+        "label": "平均预期寿命",
+        "fatherValue": "A",
+        "fatherLabel": "人口规模巨大的现代化",
+        "unit": "岁"
+    },
+    {
+        "value": "A5",
+        "label": "常住人口抚养比",
+        "fatherValue": "A",
+        "fatherLabel": "人口规模巨大的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "A6",
+        "label": "每十万人口高等学校平均在校生数",
+        "fatherValue": "A",
+        "fatherLabel": "人口规模巨大的现代化",
+        "unit": "人"
+    },
+    {
+        "value": "B1",
+        "label": "人均GDP基尼系数",
+        "fatherValue": "B",
+        "fatherLabel": "共同富裕的现代化",
+        "unit": "无"
+    },
+    {
+        "value": "B2",
+        "label": "城镇化率",
+        "fatherValue": "B",
+        "fatherLabel": "共同富裕的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "B3",
+        "label": "城镇登记失业率",
+        "fatherValue": "B",
+        "fatherLabel": "共同富裕的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "B4",
+        "label": "粗离婚率",
+        "fatherValue": "B",
+        "fatherLabel": "共同富裕的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "B5",
+        "label": "城市居民最低生活保障人数",
+        "fatherValue": "B",
+        "fatherLabel": "共同富裕的现代化",
+        "unit": "人"
+    },
+    {
+        "value": "B6",
+        "label": "农村居民最低生活保障人数",
+        "fatherValue": "B",
+        "fatherLabel": "共同富裕的现代化",
+        "unit": "人"
+    },
+    {
+        "value": "B7",
+        "label": "孤儿数",
+        "fatherValue": "B",
+        "fatherLabel": "共同富裕的现代化",
+        "unit": "人"
+    },
+    {
+        "value": "C1",
+        "label": "人均农村居民消费支出",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "元"
+    },
+    {
+        "value": "C2",
+        "label": "人均城镇居民消费支出",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "元"
+    },
+    {
+        "value": "C3",
+        "label": "人均城市道路面积",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "平方米"
+    },
+    {
+        "value": "C4",
+        "label": "城市每万人拥有公共交通车辆",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "标台"
+    },
+    {
+        "value": "C5",
+        "label": "城市道路照明灯",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "千盏"
+    },
+    {
+        "value": "C6",
+        "label": "互联网普及率",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "C7",
+        "label": "城镇居民每百户家用电脑拥有量",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "台"
+    },
+    {
+        "value": "C8",
+        "label": "居民平均每百户年末移动电话拥有量",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "台"
+    },
+    {
+        "value": "C9",
+        "label": "单位人口拥有公共图书馆藏量",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "册"
+    },
+    {
+        "value": "C10",
+        "label": "艺术表演场馆演出场次",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "万场次"
+    },
+    {
+        "value": "C11",
+        "label": "每万人博物馆文物藏品",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "件"
+    },
+    {
+        "value": "C12",
+        "label": "博物馆从业人员",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "人"
+    },
+    {
+        "value": "C13",
+        "label": "规模以上工业企业R&D经费/GDP",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "C14",
+        "label": "地方财政教育支出/GDP",
+        "fatherValue": "C",
+        "fatherLabel": "物质文明与精神文明相协调的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "D1",
+        "label": "城市绿地面积",
+        "fatherValue": "D",
+        "fatherLabel": "人与自然和谐共生的现代化",
+        "unit": "公顷"
+    },
+    {
+        "value": "D2",
+        "label": "人均公园绿地面积",
+        "fatherValue": "D",
+        "fatherLabel": "人与自然和谐共生的现代化",
+        "unit": "平方米"
+    },
+    {
+        "value": "D3",
+        "label": "自然保护区占辖区面积比重",
+        "fatherValue": "D",
+        "fatherLabel": "人与自然和谐共生的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "D4",
+        "label": "环境保护支出",
+        "fatherValue": "D",
+        "fatherLabel": "人与自然和谐共生的现代化",
+        "unit": "亿元"
+    },
+    {
+        "value": "D5",
+        "label": "万元GDP能源消费量",
+        "fatherValue": "D",
+        "fatherLabel": "人与自然和谐共生的现代化",
+        "unit": "吨标准煤/万元"
+    },
+    {
+        "value": "D6",
+        "label": "生活垃圾清运量",
+        "fatherValue": "D",
+        "fatherLabel": "人与自然和谐共生的现代化",
+        "unit": "万吨"
+    },
+    {
+        "value": "D7",
+        "label": "每万人拥有公共厕所",
+        "fatherValue": "D",
+        "fatherLabel": "人与自然和谐共生的现代化",
+        "unit": "座/万人"
+    },
+    {
+        "value": "D8",
+        "label": "城市污水日处理能力",
+        "fatherValue": "D",
+        "fatherLabel": "人与自然和谐共生的现代化",
+        "unit": "万立方米"
+    },
+    {
+        "value": "E1",
+        "label": "第一产业增加值占比",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "E2",
+        "label": "第二产业增加值占比",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "E3",
+        "label": "第三产业增加值占比",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "%"
+    },
+    {
+        "value": "E4",
+        "label": "人均GDP",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "元/人"
+    },
+    {
+        "value": "E5",
+        "label": "人均一般公共预算收入",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "元/人"
+    },
+    {
+        "value": "E6",
+        "label": "人均实际利用外资",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "美元/人"
+    },
+    {
+        "value": "E7",
+        "label": "人均对外直接投资净额",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "美元/人"
+    },
+    {
+        "value": "E8",
+        "label": "人均境内货源地出口总额",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "美元/人"
+    },
+    {
+        "value": "E9",
+        "label": "人均境内目的地进口总额",
+        "fatherValue": "E",
+        "fatherLabel": "走和平发展道路的现代化",
+        "unit": "美元/人"
+    }
+]
