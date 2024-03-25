@@ -61,7 +61,6 @@ export default {
                 tooltip: {
                     trigger: 'item'
                 },
-                color: ['#FF69B4', '#A020F0', '#54FF9F', 'yellow', '#00FFFF', '#FF6A6A', '#00BFFF'],
                 series: [
                     {
                         type: 'pie', // 设置图表类型为饼图
@@ -114,10 +113,48 @@ export default {
 
         },
         updateChart() {
-            const chartData = this.allData.chartData.map(item => ({
-                name: item.region.replace("地区", ''), // 名称
-                value: item.score, // 值
-            }));
+            const gradientColorList = [
+                [{ offset: 0, color: '#2E72BF' }, { offset: 1, color: '#23E5E5' }],//0
+                [{ offset: 0, color: '#5052EE' }, { offset: 1, color: '#AB6EE5' }],//1
+                [{ offset: 0, color: '#0BA82C' }, { offset: 1, color: 'yellow' }],//2
+                [{ offset: 0, color: '#FFC1C1' }, { offset: 1, color: '#8B658B' }],//3
+                [{ offset: 0, color: 'red' }, { offset: 1, color: 'orange' }],//4
+                [{ offset: 0, color: 'pink' }, { offset: 1, color: 'purple' }],//5
+                [{ offset: 0, color: 'white' }, { offset: 1, color: 'green' }],//6
+                // ...其他渐变颜色组合
+            ];
+            const gradientParams = [
+                [{ x: 0.1, y: 0.8, r: 1.5 }],
+                [{ x: 0.2, y: 0.5, r: 0.7 }],
+                [{ x: 0.2, y: 0.2, r: 1 }],
+                [{ x: 0.9, y: 0.1, r: 0.7 }],
+                [{ x: 0.7, y: 0.65, r: 0.5 }],
+                [{ x: 0.8, y: 0.9, r: 1 }],
+                [{ x: 0.8, y: 0.8, r: 1.5 }],
+            ]
+            const chartData = this.allData.chartData.map((item, index) => {
+                // 获取对应扇形的渐变参数
+                const colorStops = gradientColorList[index % gradientColorList.length];
+                const params = gradientParams[index % gradientParams.length][0]; // 访问每个小数组中的第一个对象
+                return {
+
+                    name: item.region.replace("地区", ''), // 名称
+                    value: item.score, // 值
+                    itemStyle: {
+                        normal: {
+                            // 使用对应的x，y，r设置径向渐变
+                            color: new this.$echarts.graphic.RadialGradient(
+                                params.x, // x坐标
+                                params.y, // y坐标
+                                params.r, // 渐变半径
+                                colorStops,
+                                false // 设置为false表示坐标是相对的
+                            )
+                        }
+                    }
+                };
+            });
+
             // 处理图表需要的数据
             const dataOption = {
                 series: [{
