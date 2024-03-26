@@ -53,10 +53,12 @@ export default {
         initChart() {
             this.chartInstance = this.$echarts.init(this.$refs.rank_ref, this.theme)
             const initOption = {
+                backgroundColor:'rgba(41,52,65,0.2)',
                 title: {
                     text: '区域现代化指数',
                     left: 20,
-                    top: 10
+                    top: 10,
+                    color:'#00000'
                 },
                 tooltip: {
                     trigger: 'item'

@@ -7,7 +7,6 @@ import mapPage2 from '@/views/mapPage2'
 import rankPage from'@/views/rankPage'
 import ScreenPage from '@/views/ScreenPage'
 import zujian4Page from '@/views/zujian4Page.vue'
-import zujian5Page from '@/views/zujian5Page.vue'
 import DataPage from '@/views/DataPage.vue'
 import BillboardPage from "@/views/BillboardPage.vue";
 import AchievementPage from "@/views/AchievementPage.vue";

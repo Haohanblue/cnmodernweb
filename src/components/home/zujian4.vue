@@ -65,18 +65,19 @@ export default {
     },
     destroyed() {
         window.removeEventListener('resize', this.screenAdapter)
-        this.$bus.$off('dataReceived')
+        this.$bus.$off('province-change')
     },
     methods: {
         initChart() {
             this.chartInstance = this.$echarts.init(this.$refs.zujian4_ref, this.theme)
             const initOption = {
+                backgroundColor:'rgba(41,52,65,0.2)',
                 title: {
                     text: this.currentPro,
                     left: 60,
-                    top: 15
+                    top: 15,
+                    color:"#00000"
                 },
-
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -149,16 +150,17 @@ export default {
                         data: this.value,
                         type: 'line',
                         areaStyle: {
-                            color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                                {
-                                    offset: 0,
-                                    color: 'rgba(252,151,175,0.5)'
-                                },
-                                {
-                                    offset: 1,
-                                    color: 'rgba(252,151,175,1)'
-                                }
-                            ])
+                            // color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [
+                            //     {
+                            //         offset: 0,
+                            //         color: 'rgba(252,151,175,0.5)'
+                            //     },
+                            //     {
+                            //         offset: 1,
+                            //         color: 'rgba(252,151,175,1)'
+                            //     }
+                            // ])
+                            color:'rgba(252,151,175,0.8)'
                         },
                     }
                 ]
