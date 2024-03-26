@@ -1,5 +1,5 @@
 <template>
-    <div class="screen-container" :style="containerStyle">
+    <div class="screen-container background-container" :style="containerStyle">
         <header class="screen-header">
             <span class="title">中国现代化大屏展示</span>
             <div class="title-right">
@@ -74,25 +74,19 @@ import seller2 from '@/components/home/seller2.vue';
 import rank from '@/components/home/rank.vue';
 import tabBar from "@/components/tabBar.vue";
 import zujian4 from '@/components/home/zujian4.vue';
-import zujian5 from '@/components/home/zujian5.vue';
 
 import { mapState } from 'vuex';
 import { getThemeValue } from '@/utils/theme.utils';
 import '@/assets/css2/iconfont.css'
 export default {
     async created() {
-
         const { data: ret } = await this.$http.get('sql/data/main');
         this.rets = ret;
         this.arrYear = ret.map((year, index) => {
             return ret[index].year;
         });
-
         const{data:ret2}=await this.$http.get('sql/data/area');
         this.retArea=ret2
-
-        
-
         // 发送事件和数据
         this.$bus.$emit('dataArea',this.retArea);
         this.$bus.$emit('dataReceived', { rets: this.rets, arrYear: this.arrYear });
@@ -107,10 +101,10 @@ export default {
                 hot: false,
                 stock: false,
                 zujian4: false,
-                zujian5: false,
                 rets: null,
                 retArea:null,
                 arrYear: [],
+                backgroundImageUrl: '@/assets/black1.jpg'
             }
         }
     },
@@ -121,7 +115,6 @@ export default {
         map2,
         tabBar,
         zujian4,
-        zujian5
     },
     methods: {
         changeSize(chartName) {
@@ -139,6 +132,7 @@ export default {
         },
         changeTheme() {
             this.$store.commit('changeTheme')
+            
         }
     },
     computed: {
@@ -149,8 +143,11 @@ export default {
         },
         containerStyle() {
             return {
-                backgroundColor: getThemeValue(this.theme).backgroundColor,
-                color: getThemeValue(this.theme).titleColor
+                // backgroundColor: getThemeValue(this.theme).backgroundColor,
+                // backgroundImage:getThemeValue(this.theme).backgroundImage,
+                color: getThemeValue(this.theme).titleColor,
+                // backgroundImage: 'url(' + require('@/assets/black1.jpg') + ')',
+                backgroundImage:getThemeValue(this.theme).backgroundImage
             }
         },
         ...mapState(['theme']),
@@ -192,7 +189,7 @@ export default {
     width: 100%;
     height: 95%;
     padding: 0 20px;
-    background-color: #161522;
+    // background-color: #161522;
     color: #fff;
     box-sizing: border-box;
 }
@@ -207,7 +204,7 @@ export default {
     .title {
         position: absolute;
         left: 50%;
-        top:30%;
+        top:50%;
         bottom: 20%;
         font-size: 20px;
         transform: translate(-50%, -50%);
@@ -262,7 +259,6 @@ export default {
             position: relative;
         }
     }
-
     .screen-middle {
         height: 100%;
         width: 41.5%;
@@ -274,15 +270,7 @@ export default {
             height: 92%;
             position: relative;
         }
-
-        // #middle-bottom {
-        //     margin-top: 25px;
-        //     width: 100%;
-        //     height: 28%;
-        //     position: relative;
-        // }
     }
-
     .screen-right {
         height: 100%;
         width: 27.6%;
@@ -299,11 +287,17 @@ export default {
         }
     }
 }
-
 .resize {
     position: absolute;
     top: 20px;
     right: 20px;
     cursor: pointer;
+}
+//背景图片
+.background-container {
+//   background-image: url('~@/assets/black1.jpg'); /* 这里的路径根据你的项目结构和图片位置来定 */
+  background-size: cover; /* 或者使用其他值来适配你的设计需求 */
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 </style>

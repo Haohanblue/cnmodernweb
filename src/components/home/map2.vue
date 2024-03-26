@@ -5,14 +5,10 @@
     </div>
 </template>
 <script>
-import { getProvinceMapInfo } from '@/utils/map_utils';
 import axios from 'axios'
 import { mapState } from "vuex"
 const BASEURL = require('../../../config/config.json').BASEURL;
 export default {
-    beforeDestroy() {
-        this.$bus.$off('dataReceived')
-    },
     data() {
         return {
             chartInstance: null,
@@ -21,7 +17,12 @@ export default {
             arrYear: [],//------存入年份
             rets: null,
             jsonData:{},
-            currentYear:'2000'
+            currentYear:'2000',
+            currentPro:'北京',
+            isPro:['北京','河北','天津','福建','黑龙江','辽宁','内蒙古',
+            '新疆','西藏','湖南','湖北','四川','重庆','山东','山西','广西',
+            '广东','浙江','上海','江苏','宁夏','青海','吉林','安徽','甘肃',
+            '陕西','贵州','河南','江西','云南','海南']
         }
     },
     mounted() {
@@ -33,6 +34,11 @@ export default {
         this.chartInstance.on('timelinechanged', (params) => {
             const newYear = this.arrYear[params.currentIndex];
             this.currentYear = newYear; // 更新组件内部状态
+            // console.log("传过去的省份是"+this.currentPro);
+            if (this.isPro.includes(this.currentPro)){
+                this.$bus.$emit('province-change',this.currentPro);
+            }
+            
             this.$bus.$emit('year-changed', newYear); // 使用事件总线通知其他组件年份变化
         });
         
@@ -40,15 +46,18 @@ export default {
     destroyed() {
         window.removeEventListener('reisze', this.screenAdapter)
         this.$refs['map_ref'].removeEventListener('wheel', this.handleMapZoom) // 修改这行，移除绑定的监听器
+        this.$bus.$off('dataReceived')
     },
     methods: {
         async initChart() {
-            this.chartInstance = this.$echarts.init(this.$refs.map_ref, this.theme)
+            
+            this.chartInstance = this.$echarts.init(this.$refs.map_ref)
             //获取中国地图的矢量数据
             const ret = await axios.get(BASEURL+'/static/map/china.json')
             this.$echarts.registerMap('china', ret.data)
             //初始化地图
             const initOption = {
+                backgroundColor:'rgba(41,52,65,0.2)',
                 geo: {
                     type: 'map',
                     map: 'china',
@@ -66,17 +75,10 @@ export default {
             }
             this.chartInstance.setOption(initOption)
             this.chartInstance.on('click',async(arg)=>{
-                console.log(arg.name);
-                // const provinceInfo=getProvinceMapInfo(arg.name)
-                // console.log(provinceInfo);
-                //判断当前点击的省份的地图矢量数据是否存在
-                // if(!this.mapData[provinceInfo.key]){
-                //     const ret=await axios.get(BASEURL + provinceInfo.path)
-                //     this.mapData[provinceInfo.key] = ret.data
-                //     // console.log(ret);
-                //     this.$echarts.registerMap(provinceInfo.key, ret.data)
-                // }
-                this.$bus.$emit('province-change',arg.name);
+                this.currentPro=arg.name
+                if (this.isPro.includes(this.currentPro)){
+                this.$bus.$emit('province-change',this.currentPro);
+            }
             })
         },
         getData() {
@@ -138,6 +140,7 @@ export default {
                     onchanged: (timelineIndex) => {
         const selectedYear = this.arrYear[timelineIndex];
         this.updateYear(selectedYear);
+
     }
                 },
 
@@ -146,7 +149,6 @@ export default {
 
             if (!this.rets) return
             this.rets.forEach((item, index) => {
-                // console.log(item.chartData);
                 item.chartData.sort((a,b)=>{
                     return a.score-b.score
                 })
@@ -162,7 +164,8 @@ export default {
                     title: {
                         text: item.year + '年各省现代化程度',
                         left: "5%",
-                        top: "5%"
+                        top: "5%",
+                        color:'#00000'
                     },
                     series: [
                         {
@@ -214,16 +217,16 @@ export default {
         });
     },
     updateYear(year) {
-        console.log(year);
+        // console.log(year);
         this.currentYear = year;
         // console.log(currentYear);
         // 发送事件到全局事件总线
         this.$bus.$emit('year-changed', year);
     },
     },
-    computed: {
-        ...mapState(['theme'])
-    },
+    // computed: {
+    //     ...mapState(['theme'])
+    // },
     watch: {
         theme() {
             this.chartInstance.dispose()//摧毁实例对象
@@ -238,6 +241,9 @@ export default {
             const newYear = this.arrYear[params.currentIndex];
             this.currentYear = newYear; // 更新组件内部状态
             this.$bus.$emit('year-changed', newYear); // 使用事件总线通知其他组件年份变化
+            if (this.isPro.includes(this.currentPro)){
+                this.$bus.$emit('province-change',this.currentPro);
+            }
         });
             // this.updateChart()//加载数据更新图表
         }
