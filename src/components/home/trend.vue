@@ -206,11 +206,6 @@ export default {
     top: 20px;
     z-index: 10;
     position: absolute;
-<<<<<<< Updated upstream
-    left: 10px,
-
-=======
     left: 10px
->>>>>>> Stashed changes
 }
 </style>
