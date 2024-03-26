@@ -199,7 +199,7 @@ export default {
     top: 20px;
     z-index: 10;
     position: absolute;
-    left: 10px,
+    left: 10px
 
 }
 </style>

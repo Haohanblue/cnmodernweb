@@ -65,7 +65,7 @@ export default {
                 }
             }
             this.chartInstance.setOption(initOption)
-            this.chartInstance.on('dblclick',async(arg)=>{
+            this.chartInstance.on('click',async(arg)=>{
                 console.log(arg.name);
                 // const provinceInfo=getProvinceMapInfo(arg.name)
                 // console.log(provinceInfo);

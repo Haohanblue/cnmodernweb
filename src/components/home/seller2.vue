@@ -159,7 +159,7 @@ export default {
                                         },
                                         {
                                             offset: 1,
-                                            color: '#4FF778'
+                                            color: 'yellow'
                                         }
                                     ])
                                 } else if (this.currentZhibiao == '共同富裕') {
