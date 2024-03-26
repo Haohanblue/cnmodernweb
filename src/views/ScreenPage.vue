@@ -91,6 +91,8 @@ export default {
         const{data:ret2}=await this.$http.get('sql/data/area');
         this.retArea=ret2
 
+        
+
         // 发送事件和数据
         this.$bus.$emit('dataArea',this.retArea);
         this.$bus.$emit('dataReceived', { rets: this.rets, arrYear: this.arrYear });
