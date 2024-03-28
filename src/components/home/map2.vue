@@ -1,54 +1,75 @@
 <template>
-    <div class="com-container" >
+    <div class="com-container">
         <div class="com-chart" ref="map_ref">
         </div>
     </div>
 </template>
 <script>
-import { getProvinceMapInfo } from '@/utils/map_utils';
 import axios from 'axios'
 import { mapState } from "vuex"
 const BASEURL = require('../../../config/config.json').BASEURL;
+import { getThemeValue } from "@/utils/theme.utils";
 export default {
-    beforeDestroy() {
-        this.$bus.$off('dataReceived')
-    },
     data() {
         return {
             chartInstance: null,
             allData: null,
-            mapData:[],//缓存省份地图数据
+            mapData: [],//缓存省份地图数据
             arrYear: [],//------存入年份
             rets: null,
-            jsonData:{},
-            currentYear:'2000'
+            jsonData: {},
+            currentYear: '2000',
+            currentPro: '北京',
+            isPro: ['北京', '河北', '天津', '福建', '黑龙江', '辽宁', '内蒙古',
+                '新疆', '西藏', '湖南', '湖北', '四川', '重庆', '山东', '山西', '广西',
+                '广东', '浙江', '上海', '江苏', '宁夏', '青海', '吉林', '安徽', '甘肃',
+                '陕西', '贵州', '河南', '江西', '云南', '海南'],
+            sta: false
         }
     },
     mounted() {
         this.initChart(),
-        this.getData(),
-        window.addEventListener('resize', this.screenAdapter)
+            this.getData(),
+            window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
         this.$refs['map_ref'].addEventListener('wheel', this.handleMapZoom, { passive: false })// 修改这行，绑定到地图容器
         this.chartInstance.on('timelinechanged', (params) => {
             const newYear = this.arrYear[params.currentIndex];
             this.currentYear = newYear; // 更新组件内部状态
+            if (this.isPro.includes(this.currentPro)) {
+                this.$bus.$emit('province-change', this.currentPro);
+            }
+
             this.$bus.$emit('year-changed', newYear); // 使用事件总线通知其他组件年份变化
         });
-        
+        this.$bus.$on('changebackGround', (info) => {
+            if (info.name == 'map') {
+                this.sta = info.sta
+                console.log(this.sta);
+            }
+            this.initChart()
+        })
     },
     destroyed() {
         window.removeEventListener('reisze', this.screenAdapter)
         this.$refs['map_ref'].removeEventListener('wheel', this.handleMapZoom) // 修改这行，移除绑定的监听器
+        this.$bus.$off('dataReceived')
+        this.$bus.$off('changebackGround')
+
     },
     methods: {
         async initChart() {
-            this.chartInstance = this.$echarts.init(this.$refs.map_ref, this.theme)
+            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
+            this.chartInstance = this.$echarts.init(this.$refs.map_ref,this.theme)
             //获取中国地图的矢量数据
-            const ret = await axios.get(BASEURL+'/static/map/china.json')
+            const ret = await axios.get(BASEURL + '/static/map/china.json')
             this.$echarts.registerMap('china', ret.data)
             //初始化地图
             const initOption = {
+                backgroundColor:backgroundColor,
+                title:{
+                    color:getThemeValue(this.theme).titleColor
+                },
                 geo: {
                     type: 'map',
                     map: 'china',
@@ -62,21 +83,14 @@ export default {
                     trigger: 'item',
                     show: true,
                     formatter: '{b}:{c}'
-                }
+                },
             }
             this.chartInstance.setOption(initOption)
-            this.chartInstance.on('click',async(arg)=>{
-                console.log(arg.name);
-                // const provinceInfo=getProvinceMapInfo(arg.name)
-                // console.log(provinceInfo);
-                //判断当前点击的省份的地图矢量数据是否存在
-                // if(!this.mapData[provinceInfo.key]){
-                //     const ret=await axios.get(BASEURL + provinceInfo.path)
-                //     this.mapData[provinceInfo.key] = ret.data
-                //     // console.log(ret);
-                //     this.$echarts.registerMap(provinceInfo.key, ret.data)
-                // }
-                this.$bus.$emit('province-change',arg.name);
+            this.chartInstance.on('click', async (arg) => {
+                this.currentPro = arg.name
+                if (this.isPro.includes(this.currentPro)) {
+                    this.$bus.$emit('province-change', this.currentPro);
+                }
             })
         },
         getData() {
@@ -88,10 +102,12 @@ export default {
         },
         updateChart() {
             const colorarr = [
-                'red', 'green', 'yellow', 'pink','blue','orange','Aqua','GreenYellow','Salmon',
-                'DeepPink','OrangeRed','LightSeaGreen','DeepSkyBlue','red', 'green', 'yellow', 
-                'pink','blue','orange','Aqua','GreenYellow','Salmon','DeepPink','OrangeRed'
-                
+                'red', 'green', 'blue',
+                'DeepPink', 'DeepSkyBlue', 'red', 'green', 'blue','DeepPink','red', 'green', 'blue',
+                'DeepPink', 'DeepSkyBlue','red', 'green', 'blue',
+                'DeepPink', 'DeepSkyBlue','red', 'green', 'blue',
+                'DeepPink', 'DeepSkyBlue',
+
             ]
 
             const dataOption = {
@@ -136,9 +152,10 @@ export default {
                         }
                     },
                     onchanged: (timelineIndex) => {
-        const selectedYear = this.arrYear[timelineIndex];
-        this.updateYear(selectedYear);
-    }
+                        const selectedYear = this.arrYear[timelineIndex];
+                        this.updateYear(selectedYear);
+
+                    }
                 },
 
                 options: []
@@ -146,12 +163,11 @@ export default {
 
             if (!this.rets) return
             this.rets.forEach((item, index) => {
-                // console.log(item.chartData);
-                item.chartData.sort((a,b)=>{
-                    return a.score-b.score
+                item.chartData.sort((a, b) => {
+                    return a.score - b.score
                 })
-                const minn=item.chartData[0]
-                const maxx=item.chartData[item.chartData.length-1]
+                const minn = item.chartData[0]
+                const maxx = item.chartData[item.chartData.length - 1]
                 const seriesData = item.chartData.map(data => ({
                     name: data.province,
                     value: data.score
@@ -162,18 +178,19 @@ export default {
                     title: {
                         text: item.year + '年各省现代化程度',
                         left: "5%",
-                        top: "5%"
+                        top: "5%",
+                        // color: getThemeValue(this.theme).titleColor
                     },
                     series: [
                         {
-                            data:seriesData,
+                            data: seriesData,
                             geoIndex: 0,
                             type: "map"
                         }
                     ],
                     visualMap: {
                         min: minn.score,
-                        max: maxx.score-0.01,
+                        max: maxx.score - 0.01,
                         inRange: {
                             color: ['white', colorarr[index]]
                         },
@@ -198,49 +215,52 @@ export default {
             this.chartInstance.resize()
         },
         handleMapZoom(event) {
-        // 阻止默认的滚动事件
-        event.preventDefault();
-        // 获取当前地图的缩放级别
-        let scale = this.chartInstance.getOption().geo[0].zoom || 1;
-        // 根据滚动的方向调整缩放级别，这里将缩放因子调整为1.2和0.8，以增加灵敏度
-        scale *= (event.deltaY > 0) ? 0.8 : 1.2;
-        // 限制缩放级别，避免过度放大或缩小
-        scale = Math.min(Math.max(scale, 0.5), 5);
-        // 应用新的缩放级别
-        this.chartInstance.setOption({
-            geo: {
-                zoom: scale
-            }
-        });
-    },
-    updateYear(year) {
-        console.log(year);
-        this.currentYear = year;
-        // console.log(currentYear);
-        // 发送事件到全局事件总线
-        this.$bus.$emit('year-changed', year);
-    },
+            // 阻止默认的滚动事件
+            event.preventDefault();
+            // 获取当前地图的缩放级别
+            let scale = this.chartInstance.getOption().geo[0].zoom || 1;
+            // 根据滚动的方向调整缩放级别，这里将缩放因子调整为1.2和0.8，以增加灵敏度
+            scale *= (event.deltaY > 0) ? 0.8 : 1.2;
+            // 限制缩放级别，避免过度放大或缩小
+            scale = Math.min(Math.max(scale, 0.5), 5);
+            // 应用新的缩放级别
+            this.chartInstance.setOption({
+                geo: {
+                    zoom: scale
+                }
+            });
+        },
+        updateYear(year) {
+            // console.log(year);
+            this.currentYear = year;
+            // console.log(currentYear);
+            // 发送事件到全局事件总线
+            this.$bus.$emit('year-changed', year);
+        },
     },
     computed: {
-        ...mapState(['theme'])
+        ...mapState(['theme']),
     },
     watch: {
         theme() {
             this.chartInstance.dispose()//摧毁实例对象
             this.initChart()//初始化图表
             this.screenAdapter()//分辨率适配
-            
             setTimeout(() => {
                 this.updateChart()
             }, 500);
             this.updateYear('2000')
             this.chartInstance.on('timelinechanged', (params) => {
-            const newYear = this.arrYear[params.currentIndex];
-            this.currentYear = newYear; // 更新组件内部状态
-            this.$bus.$emit('year-changed', newYear); // 使用事件总线通知其他组件年份变化
-        });
+                const newYear = this.arrYear[params.currentIndex];
+                this.currentYear = newYear; // 更新组件内部状态
+                this.$bus.$emit('year-changed', newYear); // 使用事件总线通知其他组件年份变化
+                if (this.isPro.includes(this.currentPro)) {
+                    this.$bus.$emit('province-change', this.currentPro);
+                }
+            });
             // this.updateChart()//加载数据更新图表
-        }
+        },
+
     },
 }
 </script>

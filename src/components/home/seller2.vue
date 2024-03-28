@@ -4,7 +4,7 @@
             <span :style="comStyle">{{ currentZhibiao }}</span>
             <!-- comStyle是随着主题变化改变字体颜色 -->
             <span class="iconfont title-icon" @click="showChoice = !showChoice" :style="comStyle">&#xe6eb;</span>
-            <div class="select-con" v-show="showChoice" :style="dropdownStyle">
+            <div class="select-con" v-show="showChoice">
                 <div class="select-item" :style="comStyle" @click="handleSelect(item)" v-for="item in selectfilter"> {{
             item }}
                 </div>
@@ -17,12 +17,10 @@
 import { mapState } from "vuex";
 import { getThemeValue } from "@/utils/theme.utils";
 export default {
-
     data() {
         return {
             chartInstance: null,
             allData: null,
-            timeId: null,
             showChoice: false,//下拉列表是否出现
             rets: null,//所有数据
             currentZhibiao: '物质文明和精神文明相协调',
@@ -31,6 +29,7 @@ export default {
             titleFontsize: 0,//给标题设置大小
             sellNames: null,
             sellerValue: null,
+            sta: false
         }
     },
     computed: {
@@ -51,15 +50,7 @@ export default {
         comStyle() {   //切换主题
             return {
                 color: getThemeValue(this.theme).titleColor,
-
             }
-        },
-        dropdownStyle() {
-            // 使用 getThemeValue 函数根据当前主题获取背景颜色
-            const themeValue = getThemeValue(this.theme);
-            return {
-                backgroundColor: themeValue ? themeValue.borderColor : 'defaultBackgroundColor', // 如果没有找到主题，则使用默认背景颜色
-            };
         },
         ...mapState(['theme']),
     },
@@ -68,39 +59,46 @@ export default {
             this.chartInstance.dispose()
             this.initChart()
             this.screenAdapter()
-            this.updateChart()
+            // this.updateChart()
             this.getData()
         },
     },
     mounted() {
         this.$bus.$on('year-changed', (newYear) => {
             this.currentYear = newYear;
-            // console.log(newYear);
-            // console.log(this.currentYear);
             this.getData()
         })
         this.$bus.$on('dataReceived', (data) => {
             this.rets = data.rets;
             this.allData = this.rets.find(item => item.year === this.currentYear).chartData;
-            // console.log(this.allData);
-            this.updateChart(); // 使用新数据更新图表
+            this.getData(); // 使用新数据更新图表
         });
-
         this.initChart()
         this.getData()
         window.addEventListener('resize', this.screenAdapter),
             //刚开始就进行屏幕的适配
-        this.screenAdapter()
+            this.screenAdapter()
+        this.$bus.$on('changebackGround', (info) => {
+            if (info.name == 'seller') {
+                this.sta = info.sta
+                // console.log(this.sta);
+                this.initChart()
+            }
+        })
     },
     destroyed() {
         window.removeEventListener('resize', this.screenAdapter)
         this.$bus.$off('year-changed');
+        this.$bus.$off('changebackGround');
         this.$bus.$off('dataReceived');
     },
     methods: {
         initChart() {
+            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
+            // console.log(backgroundColor);
             this.chartInstance = this.$echarts.init(this.$refs.seller_ref, this.theme)
             const initOption = {
+                backgroundColor: backgroundColor,
                 grid: {//对坐标轴进行配置
                     top: '20%',
                     left: '2%',
@@ -110,7 +108,7 @@ export default {
                 },
                 xAxis: {
                     type: 'value',
-                    scale:true
+                    scale: true
                 },
                 yAxis: {
                     type: 'category',
@@ -196,16 +194,13 @@ export default {
         async getData() {
             let yearIndex = this.currentYear - 2000;
             if (yearIndex !== -1) {
-                if(this.rets==null){
+                if (this.rets == null) {
                     console.log("没获取到数据，请稍后");
-                }else{
-                this.allData = this.rets[yearIndex].chartData;
-                
-                this.updateChart(); // 用新数据更新图表
+                } else {
+                    this.allData = this.rets[yearIndex].chartData;
+                    this.updateChart(); // 用新数据更新图表
                 }
-                
             }
-            // console.log();
         },
         updateChart() {
             if (this.currentZhibiao == "物质文明和精神文明相协调") {
@@ -265,8 +260,6 @@ export default {
                     return item.E
                 }).reverse()
             }
-
-
             const dataOption = {
                 yAxis: {
                     data: this.sellNames
@@ -309,7 +302,6 @@ export default {
             this.updateChart()
             this.showChoice = false
         },
-
     }
 }
 </script>
@@ -324,7 +316,6 @@ export default {
     .title-icon {
         margin-left: 10px;
         cursor: pointer;
-
     }
 
     .select-item {

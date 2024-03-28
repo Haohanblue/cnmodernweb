@@ -1,12 +1,11 @@
 <template>
     <div class="com-container">
-
         <div class="com-chart" ref="trend_ref"></div>
     </div>
 </template>
 <script>
-import { all } from "axios";
 import { mapState } from "vuex"
+import { getThemeValue } from "@/utils/theme.utils";
 export default {
     data() {
         return {
@@ -15,13 +14,13 @@ export default {
             rets: null,
             currentYear: '2000',
             currentPro: '北京',  //当前显示的省份
-            titleFontsize: 0
+            titleFontsize: 0,
+            sta: false
         }
     },
     mounted() {
         this.$bus.$on('year-changed', (newYear) => {
             this.currentYear = newYear;
-            // console.log(newYear);
             // console.log(this.currentYear);
             this.getData()
         })
@@ -31,7 +30,9 @@ export default {
             this.updateChart(); // 使用新数据更新图表
         });
         this.$bus.$on('province-change', (name) => {
+            // console.log(name);
             this.currentPro = name
+            // console.log("传过来的省份名称是"+name);
             // this.getData()
             this.updateChart()
         })
@@ -39,8 +40,13 @@ export default {
         this.getData()
         window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
-
-
+        this.$bus.$on('changebackGround', (info) => {
+            if (info.name == 'trend') {
+                this.sta = info.sta
+                // console.log(this.sta);
+                this.initChart()
+            }
+        })
     },
     computed: {
         ...mapState(['theme']),
@@ -54,31 +60,35 @@ export default {
         }
     },
     destroyed() {
-        window.removeEventListener('reisze', this.screenAdapter)
+        window.removeEventListener('resize', this.screenAdapter)
         this.$bus.$off('dataReceived')
         this.$bus.$off('year-changed');
+        this.$bus.$off('province-change');
+        this.$bus.$off('changebackGround');
     },
     methods: {
         initChart() {
+            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
             this.chartInstance = this.$echarts.init(this.$refs.trend_ref, this.theme)
             const initOption = {
+                backgroundColor: backgroundColor,
                 title: {
                     text: '北京五指标',
                     left: 30,
-                    top: 10
+                    top: 10,
+                    color: '#00000'
                 },
                 radar: [
                     {                       // 雷达图坐标系组件，只适用于雷达图。
                         center: ['50%', '55%'],             // 圆中心坐标，数组的第一项是横坐标，第二项是纵坐标。[ default: ['50%', '50%'] ]
                         radius: 100,                        // 圆的半径，数组的第一项是内半径，第二项是外半径。
                         name: {                             // (圆外的标签)雷达图每个指示器名称的配置项。
-                            // formatter: '{value}',
                             textStyle: {
-                                fontSize: 15,
+                                fontSize: 14,
                                 color: '#CCC'
                             }
                         },
-                        nameGap: 15,                        // 指示器名称和指示器轴的距离。[ default: 15 ]
+                        nameGap: 5,                        // 指示器名称和指示器轴的距离。[ default: 15 ]
                         splitNumber: 4,                     // (这里是圆的环数)指示器轴的分割段数。[ default: 5 ]
                         shape: 'polygon',                    // 雷达图绘制类型，支持 'polygon'(多边形) 和 'circle'(圆)。[ default: 'polygon' ]
                         axisLine: {                         // (圆内的几条直线)坐标轴轴线相关设置
@@ -97,23 +107,6 @@ export default {
                         splitArea: {                        // 坐标轴在 grid 区域中的分隔区域，默认不显示。
                             show: true,
                         },
-                        indicator: [{               // 雷达图的指示器，用来指定雷达图中的多个变量（维度）,跟data中 value 对应
-                            name: 'A',                           // 指示器名称   
-                            max: 100,                               // 指示器的最大值，可选，建议设置 
-                            //color: '#fff'                           // 标签特定的颜色。
-                        }, {
-                            name: 'B',
-                            max: 100
-                        }, {
-                            name: 'C',
-                            max: 100
-                        }, {
-                            name: 'D',
-                            max: 100
-                        }, {
-                            name: 'E',
-                            max: 100
-                        }]
                     }],
                 series: [{
                     type: 'radar',              // 系列类型: 雷达图
@@ -136,18 +129,19 @@ export default {
                     areaStyle: {
                         color: '#5840D4'
                     }
-                }]
+                }],
             }
             this.chartInstance.setOption(initOption)
 
         },
         async getData() {
-            let yearIndex = this.currentYear - 2000;
+            // console.log(this.currentYear);
+            var yearIndex = this.currentYear - 2000;
             if (yearIndex !== -1) {
                 if (this.rets == null) {
                     console.log("没获取到数据，请稍后");
                 } else {
-                    // console.log(this.yearIndex);
+                    // console.log(yearIndex);
                     this.allData = this.rets[yearIndex].chartData;
                     // console.log(this.allData);
                     this.updateChart(); // 用新数据更新图表
@@ -156,24 +150,45 @@ export default {
             }
         },
         updateChart() {
-            //对数据进行处理
-            // console.log(this.allData);
             const targetData = this.allData.find(item => item.province === this.currentPro)
-            const valueArr = [targetData.A, targetData.B, targetData.C, targetData.D, targetData.E]
-            const dataOption = {
-                title: {
-                    text: this.currentPro + '五指标',
-                    left: 30,
-                    top: 10
-                },
-                series: [{
-                    data: [{
-                        name: this.currentPro,
-                        value: valueArr
-                    }]
-                }]
+            if (targetData == null) {
+                // console.log(this.allData);
+                console.log("正在加载数据");
+
+            } else {
+                // console.log(targetData);
+                const valueArr = [targetData.C, targetData.A, targetData.E, targetData.D, targetData.B]
+                const dataOption = {
+                    title: {
+                        text: this.currentPro + '五指标',
+                        left: 30,
+                        top: 10
+                    },
+                    series: [{
+                        data: [{
+                            name: this.currentPro,
+                            value: valueArr
+                        }]
+                    }],
+                    radar: [
+                    {
+                        indicator: [
+                            { name: '物质文明与精神文明相协调'+'\n'+targetData.C,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,},
+                            { name: '人口规模巨大'+'\n'+targetData.A,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,},
+                            { name: '走和平发展道路'+'\n'+targetData.E,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,},
+                            { name: '人与自然和谐共生'+'\n'+targetData.D,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,},
+                            { name: '共同富裕'+'\n'+targetData.B,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,}
+                        ]
+                    }
+                ],
+                }
+                this.chartInstance.setOption(dataOption)
             }
-            this.chartInstance.setOption(dataOption)
 
         },
         screenAdapter() {
@@ -186,12 +201,22 @@ export default {
                         fontSize: titleFontsize * 0.05
                     },
                 },
+                radar:[
+                    {
+                        radius: titleFontsize*0.225,
+                        name:{
+                            textStyle: {
+                                fontSize: titleFontsize*0.035,
+                            }
+                        }
+                    }
+                ],
+
             }
             this.chartInstance.setOption(adapterOption)
             this.chartInstance.resize()
         },
     },
-
 }
 </script>
 <style lang="less" scoped>
@@ -200,6 +225,5 @@ export default {
     z-index: 10;
     position: absolute;
     left: 10px
-
 }
 </style>
