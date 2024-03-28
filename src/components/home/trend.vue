@@ -5,6 +5,7 @@
 </template>
 <script>
 import { mapState } from "vuex"
+import { getThemeValue } from "@/utils/theme.utils";
 export default {
     data() {
         return {
@@ -13,7 +14,8 @@ export default {
             rets: null,
             currentYear: '2000',
             currentPro: '北京',  //当前显示的省份
-            titleFontsize: 0
+            titleFontsize: 0,
+            sta: false
         }
     },
     mounted() {
@@ -38,6 +40,13 @@ export default {
         this.getData()
         window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
+        this.$bus.$on('changebackGround', (info) => {
+            if (info.name == 'trend') {
+                this.sta = info.sta
+                // console.log(this.sta);
+                this.initChart()
+            }
+        })
     },
     computed: {
         ...mapState(['theme']),
@@ -55,24 +64,25 @@ export default {
         this.$bus.$off('dataReceived')
         this.$bus.$off('year-changed');
         this.$bus.$off('province-change');
+        this.$bus.$off('changebackGround');
     },
     methods: {
         initChart() {
+            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
             this.chartInstance = this.$echarts.init(this.$refs.trend_ref, this.theme)
             const initOption = {
-                backgroundColor:'rgba(41,52,65,0.2)',
+                backgroundColor: backgroundColor,
                 title: {
                     text: '北京五指标',
                     left: 30,
                     top: 10,
-                    color:'#00000'
+                    color: '#00000'
                 },
                 radar: [
                     {                       // 雷达图坐标系组件，只适用于雷达图。
                         center: ['50%', '55%'],             // 圆中心坐标，数组的第一项是横坐标，第二项是纵坐标。[ default: ['50%', '50%'] ]
                         radius: 100,                        // 圆的半径，数组的第一项是内半径，第二项是外半径。
                         name: {                             // (圆外的标签)雷达图每个指示器名称的配置项。
-                            // formatter: '{value}',
                             textStyle: {
                                 fontSize: 14,
                                 color: '#CCC'
@@ -97,23 +107,6 @@ export default {
                         splitArea: {                        // 坐标轴在 grid 区域中的分隔区域，默认不显示。
                             show: true,
                         },
-                        indicator: [{               // 雷达图的指示器，用来指定雷达图中的多个变量（维度）,跟data中 value 对应
-                            name: '物质文明与精神文明相协调',                           // 指示器名称   
-                            max: 100,                               // 指示器的最大值，可选，建议设置 
-                            //color: '#fff'                           // 标签特定的颜色。
-                        }, {
-                            name: '人口规模巨大',
-                            max: 100
-                        }, {
-                            name: '走和平发展道路',
-                            max: 100
-                        }, {
-                            name: '人与自然和谐共生',
-                            max: 100
-                        }, {
-                            name: '共同富裕',
-                            max: 100
-                        }]
                     }],
                 series: [{
                     type: 'radar',              // 系列类型: 雷达图
@@ -136,7 +129,7 @@ export default {
                     areaStyle: {
                         color: '#5840D4'
                     }
-                }]
+                }],
             }
             this.chartInstance.setOption(initOption)
 
@@ -157,8 +150,6 @@ export default {
             }
         },
         updateChart() {
-            // console.log(this.allData);
-            // console.log(this.currentPro);
             const targetData = this.allData.find(item => item.province === this.currentPro)
             if (targetData == null) {
                 // console.log(this.allData);
@@ -178,7 +169,23 @@ export default {
                             name: this.currentPro,
                             value: valueArr
                         }]
-                    }]
+                    }],
+                    radar: [
+                    {
+                        indicator: [
+                            { name: '物质文明与精神文明相协调'+'\n'+targetData.C,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,},
+                            { name: '人口规模巨大'+'\n'+targetData.A,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,},
+                            { name: '走和平发展道路'+'\n'+targetData.E,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,},
+                            { name: '人与自然和谐共生'+'\n'+targetData.D,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,},
+                            { name: '共同富裕'+'\n'+targetData.B,max: 100,                               // 指示器的最大值，可选，建议设置 
+                            color: getThemeValue(this.theme).titleColor,}
+                        ]
+                    }
+                ],
                 }
                 this.chartInstance.setOption(dataOption)
             }
@@ -194,6 +201,17 @@ export default {
                         fontSize: titleFontsize * 0.05
                     },
                 },
+                radar:[
+                    {
+                        radius: titleFontsize*0.225,
+                        name:{
+                            textStyle: {
+                                fontSize: titleFontsize*0.035,
+                            }
+                        }
+                    }
+                ],
+
             }
             this.chartInstance.setOption(adapterOption)
             this.chartInstance.resize()

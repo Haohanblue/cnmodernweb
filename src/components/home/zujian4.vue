@@ -5,8 +5,6 @@
                 v-model="selectedValue"></el-cascader>
         </div>
         <div class='com-chart' ref='zujian4_ref'></div>
-
-
     </div>
 </template>
 <script>
@@ -15,7 +13,6 @@ import { getThemeValue } from '@/utils/theme.utils'
 import { indicators } from '@/components/dict/dict'
 import { options } from '@/components/dict/dict'
 import { getFilledData } from '@/api/request'
-import { all } from 'axios'
 
 export default {
     data() {
@@ -28,10 +25,11 @@ export default {
             currentzhiBiao: 'A1',
             options: options,
             year: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009',
-                '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],
+                '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021'],
             value: [],
             selectedValue: ['A', 'A1'], // 这里是“常住人口比例”对应的value路径,默认显示的
-            currentUnit: "%"
+            currentUnit: "%",
+            sta:false,
         }
     },
     computed: {
@@ -58,6 +56,13 @@ export default {
             this.getData()
             // this.updateChart()
         })
+        this.$bus.$on('changebackGround', (info) => {
+            if (info.name == 'zujian4') {
+                this.sta = info.sta
+                console.log(this.sta);
+                this.initChart()
+            }
+        })
         this.initChart()
         this.getData()
         window.addEventListener('resize', this.screenAdapter)
@@ -66,15 +71,17 @@ export default {
     destroyed() {
         window.removeEventListener('resize', this.screenAdapter)
         this.$bus.$off('province-change')
+        this.$bus.$off('changebackGround')
     },
     methods: {
         initChart() {
+            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
             this.chartInstance = this.$echarts.init(this.$refs.zujian4_ref, this.theme)
             const initOption = {
-                backgroundColor:'rgba(41,52,65,0.2)',
+                backgroundColor:backgroundColor,
                 title: {
                     text: this.currentPro,
-                    left: 60,
+                    left: 270,
                     top: 15,
                     color:"#00000"
                 },
@@ -97,10 +104,11 @@ export default {
                             color: "#556677",
                         },
                         fontSize: 12,
-                        formatter: function (value, index) {
+                        formatter: function (value) {
                                 return value;
                         }
                     },
+                    boundaryGap: false,
                 },
                 yAxis: {
                     type: 'value',
@@ -132,8 +140,9 @@ export default {
                             fontWeight: 'bold',
                             textAlign: 'center',
                             fontSize:16,
-                            fill:'white',
+                            // fill:'white',
                             textVerticalAlign: 'bottom',
+                            fill:getThemeValue(this.theme).titleColor, 
                         },
                         left: 'center',  // 水平居中
                         bottom: 5  // 距离容器底部的距离
@@ -150,16 +159,6 @@ export default {
                         data: this.value,
                         type: 'line',
                         areaStyle: {
-                            // color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                            //     {
-                            //         offset: 0,
-                            //         color: 'rgba(252,151,175,0.5)'
-                            //     },
-                            //     {
-                            //         offset: 1,
-                            //         color: 'rgba(252,151,175,1)'
-                            //     }
-                            // ])
                             color:'rgba(252,151,175,0.8)'
                         },
                     }
@@ -180,11 +179,9 @@ export default {
             this.chartInstance.setOption(adapterOption)
             this.chartInstance.resize()
         },
+        //获取用户的选择
         handleCascaderChange(value) {
-            // 用户选择的最后一个值将会是数组的最后一个元素
             this.currentzhiBiao = value[value.length - 1];
-            // 您可以在这里处理lastValue，例如更新数据或调用其他方法
-            // console.log('用户选择的最后一级值:', this.currentzhiBiao);
             this.getData()
         },
     }
@@ -195,7 +192,7 @@ export default {
     position: absolute;
     width: 180px;
     z-index: 10;
-    left: 130px;
+    left: 70px;
     top: 10px;
     color: white;
 }

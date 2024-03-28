@@ -55,7 +55,7 @@
     ];
     echarts.registerTheme('vintage', {
         color: colorPalette,
-        backgroundColor: '#fef8ef',
+        backgroundColor: 'rgb(0,0,0,0)',
         graph: {
             color: colorPalette
         }

@@ -5,17 +5,15 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { getThemeValue } from "@/utils/theme.utils";
 export default {
-    beforeDestroy() {
-        this.$bus.$off('year-changed')
-        this.$bus.$off('dataArea')
-    },
     data() {
         return {
             chartInstance: null,
             rets: null,
             allData: null,
             currentYear: '2000',
+            sta: false
         }
     },
     mounted() {
@@ -25,7 +23,6 @@ export default {
         })
         this.$bus.$on('dataArea', (data) => {
             this.rets = data
-            // console.log(this.rets);
             this.getData()
             this.updateChart()
         })
@@ -34,9 +31,19 @@ export default {
         // this.getData()
         window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
+        this.$bus.$on('changebackGround', (info) => {
+            if (info.name == 'rank') {
+                this.sta = info.sta
+                // console.log(this.sta);
+                this.updateChart()
+            }
+        })
     },
     destroyed() {
         window.removeEventListener('resize', this.screenAdapter)
+        this.$bus.$off('changebackGround')
+        this.$bus.$off('year-changed')
+        this.$bus.$off('dataArea')
     },
     computed: {
         ...mapState(['theme'])
@@ -58,7 +65,7 @@ export default {
                     text: '区域现代化指数',
                     left: 20,
                     top: 10,
-                    color:'#00000'
+                    color: '#00000'
                 },
                 tooltip: {
                     trigger: 'item'
@@ -77,9 +84,12 @@ export default {
                         },
                         label: {
                             normal: {
-                                formatter: '{b}:{c}' + '\n\r' + '({d}%)',
+                                formatter: function (data) { return data.name + "\n" + data.percent.toFixed(1) + "%"; },
                                 show: true,
-                                position: 'left'
+                                position: 'left',
+                                color: getThemeValue(this.theme).titleColor,
+                                // fontWeight:'bold',
+                                fontSize: 15
                             },
                             emphasis: {
                                 show: true,
@@ -115,22 +125,22 @@ export default {
 
         },
         updateChart() {
+            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
             const gradientColorList = [
-                [{ offset: 0, color: '#2E72BF' }, { offset: 1, color: '#23E5E5' }],//0
-                [{ offset: 0, color: '#5052EE' }, { offset: 1, color: '#AB6EE5' }],//1
-                [{ offset: 0, color: '#0BA82C' }, { offset: 1, color: 'yellow' }],//2
-                [{ offset: 0, color: '#FFC1C1' }, { offset: 1, color: '#8B658B' }],//3
-                [{ offset: 0, color: 'red' }, { offset: 1, color: 'orange' }],//4
-                [{ offset: 0, color: 'pink' }, { offset: 1, color: 'purple' }],//5
-                [{ offset: 0, color: 'white' }, { offset: 1, color: 'green' }],//6
-                // ...其他渐变颜色组合
+                [{ offset: 0, color: '#a1c4fd' }, { offset: 1, color: '#c2e9fb' }],//0
+                [{ offset: 0, color: '#ee9ca7' }, { offset: 1, color: '#ffdde1' }],//1
+                [{ offset: 0, color: '#b3ffab' }, { offset: 1, color: '#12fff7' }],//2
+                [{ offset: 0, color: '#fddb92' }, { offset: 1, color: '#d1fdff' }],//3
+                [{ offset: 0, color: '#f6d365' }, { offset: 1, color: '#fda085' }],//4
+                [{ offset: 0, color: '#cd9cf2' }, { offset: 1, color: '#f6f3ff' }],//5
+                [{ offset: 0, color: '#96fbc4' }, { offset: 1, color: '#f9f586' }],//6
             ];
             const gradientParams = [
                 [{ x: 0.1, y: 0.8, r: 1.5 }],
-                [{ x: 0.2, y: 0.5, r: 0.7 }],
+                [{ x: 0.2, y: 0.5, r: 1 }],
                 [{ x: 0.2, y: 0.2, r: 1 }],
                 [{ x: 0.9, y: 0.1, r: 0.7 }],
-                [{ x: 0.7, y: 0.65, r: 0.5 }],
+                [{ x: 0.8, y: 0.8, r: 1 }],
                 [{ x: 0.8, y: 0.9, r: 1 }],
                 [{ x: 0.8, y: 0.8, r: 1.5 }],
             ]
@@ -139,7 +149,6 @@ export default {
                 const colorStops = gradientColorList[index % gradientColorList.length];
                 const params = gradientParams[index % gradientParams.length][0]; // 访问每个小数组中的第一个对象
                 return {
-
                     name: item.region.replace("地区", ''), // 名称
                     value: item.score, // 值
                     itemStyle: {
@@ -161,7 +170,8 @@ export default {
             const dataOption = {
                 series: [{
                     data: chartData
-                }]
+                }],
+                backgroundColor: backgroundColor,
             }
             this.chartInstance.setOption(dataOption)
         },

@@ -29,6 +29,7 @@ export default {
             titleFontsize: 0,//给标题设置大小
             sellNames: null,
             sellerValue: null,
+            sta: false
         }
     },
     computed: {
@@ -76,18 +77,28 @@ export default {
         this.getData()
         window.addEventListener('resize', this.screenAdapter),
             //刚开始就进行屏幕的适配
-        this.screenAdapter()
+            this.screenAdapter()
+        this.$bus.$on('changebackGround', (info) => {
+            if (info.name == 'seller') {
+                this.sta = info.sta
+                // console.log(this.sta);
+                this.initChart()
+            }
+        })
     },
     destroyed() {
         window.removeEventListener('resize', this.screenAdapter)
         this.$bus.$off('year-changed');
+        this.$bus.$off('changebackGround');
         this.$bus.$off('dataReceived');
     },
     methods: {
         initChart() {
+            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
+            // console.log(backgroundColor);
             this.chartInstance = this.$echarts.init(this.$refs.seller_ref, this.theme)
             const initOption = {
-                backgroundColor:'rgba(41,52,65,0.2)',
+                backgroundColor: backgroundColor,
                 grid: {//对坐标轴进行配置
                     top: '20%',
                     left: '2%',
@@ -97,7 +108,7 @@ export default {
                 },
                 xAxis: {
                     type: 'value',
-                    scale:true
+                    scale: true
                 },
                 yAxis: {
                     type: 'category',
@@ -183,11 +194,11 @@ export default {
         async getData() {
             let yearIndex = this.currentYear - 2000;
             if (yearIndex !== -1) {
-                if(this.rets==null){
+                if (this.rets == null) {
                     console.log("没获取到数据，请稍后");
-                }else{
-                this.allData = this.rets[yearIndex].chartData;
-                this.updateChart(); // 用新数据更新图表
+                } else {
+                    this.allData = this.rets[yearIndex].chartData;
+                    this.updateChart(); // 用新数据更新图表
                 }
             }
         },
@@ -301,6 +312,7 @@ export default {
     left: 20px;
     top: 20px;
     color: white;
+
     .title-icon {
         margin-left: 10px;
         cursor: pointer;
