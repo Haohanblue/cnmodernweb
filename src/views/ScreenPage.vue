@@ -1,7 +1,7 @@
 <template>
     <div class="screen-container background-container" :style="containerStyle">
         <header class="screen-header">
-            <span class="title">中国现代化大屏展示</span>
+            <span class="title"  style="font-size: 30; font-weight: bold;">中国现代化大屏展示</span>
             <div class="title-right">
                 <span :class="['iconfont', icon.color ? 'icon-taiyang' : 'icon-yueliang']" @click="changeTheme"
                     style="margin-top: 50px;"></span>
@@ -104,8 +104,8 @@ export default {
                 rets: null,
                 retArea:null,
                 arrYear: [],
-                backgroundImageUrl: '@/assets/black1.jpg'
-            }
+            },
+            backgroundImageUrl: '@/assets/black1.jpg'
         }
     },
     components: {
@@ -129,6 +129,7 @@ export default {
             this.$nextTick(() => {
                 this.$refs[chartName].screenAdapter()
             })
+            this.$bus.$emit('changebackGround',{name:chartName,sta:targetValue});//传送过去的status值是true
         },
         changeTheme() {
             this.$store.commit('changeTheme')
