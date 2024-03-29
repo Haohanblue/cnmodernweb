@@ -43,6 +43,25 @@ export function getFilledData(province, year, columns) {
             throw error;
         });
 }
+export function getHdiData(year, columns) {
+    // 创建一个 URLSearchParams 对象
+    let params = new URLSearchParams();
+    // 添加参数
+    if (year) params.append('year', year.join(','));
+    if (columns) params.append('columns', columns);
+    // 创建 URL
+    const url = `${AXIOSURL}/sql/data/hdi?${params.toString()}`;
+    console.log(url);
+    return axios.get(url)
+        .then(response => response.data)
+        .catch(error => {
+            console.error(error);
+            throw error;
+        });
+}
+
+
+
 export function downloadOriginalData(province, year, columns) {
     // 创建一个 URLSearchParams 对象
     let params = new URLSearchParams();

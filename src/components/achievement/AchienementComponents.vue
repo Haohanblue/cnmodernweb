@@ -1,12 +1,17 @@
 <template>
+    <div>
+
     <el-carousel :interval="4000" type="card" height="300px" style="margin-top: 30px">
         <el-carousel-item v-for="(item, index) in images" :key="item">
             <h3 class="medium"> <img :src="images[index]" alt="Image" width="100%" height="300px"></h3>
         </el-carousel-item>
     </el-carousel>
+            <el-button @click="handleclick">点我获取数据</el-button>
+</div>
 </template>
 
 <script>
+import { getHdiData } from '../../api/request.js';
 export default {
     name: "AchienementComponents",
     data(){
@@ -17,10 +22,23 @@ export default {
                 require('../../../public/static/achievement/C.png'),
                 require('../../../public/static/achievement/D.png'),
                 require('../../../public/static/achievement/E.png')
-            ]
+            ],
+            hdiData:null,
+            seletedYears:[],
+            seletedArea:["中国","美国"]
         }
-    
+    },
+    methods:{
+        handleclick(){
+            let year = this.seletedYears
+            let columns = this.seletedArea
+            getHdiData(year,columns).then(data=>{
+                this.hdiData = data
+                console.log(this.hdiData)
+            })
+        }
     }
+
 }
 </script>
 
