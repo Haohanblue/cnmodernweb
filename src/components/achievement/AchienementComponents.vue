@@ -1,14 +1,26 @@
 <template>
-    <el-carousel :interval="4000" type="card" height="400px" style="margin-top: 100px">
-        <el-carousel-item v-for="item in 5" :key="item">
-            <h3 class="medium">{{ item }}</h3>
+    <el-carousel :interval="4000" type="card" height="300px" style="margin-top: 30px">
+        <el-carousel-item v-for="(item, index) in images" :key="item">
+            <h3 class="medium"> <img :src="images[index]" alt="Image" width="100%" height="300px"></h3>
         </el-carousel-item>
     </el-carousel>
 </template>
 
 <script>
 export default {
-    name: "AchienementComponents"
+    name: "AchienementComponents",
+    data(){
+        return {
+            images: [
+                require('../../../public/static/achievement/A.png'),
+                require('../../../public/static/achievement/B.png'),
+                require('../../../public/static/achievement/C.png'),
+                require('../../../public/static/achievement/D.png'),
+                require('../../../public/static/achievement/E.png')
+            ]
+        }
+    
+    }
 }
 </script>
 
