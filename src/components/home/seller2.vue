@@ -2,7 +2,7 @@
     <div class="com-container">
         <div class="title" :style="titleStyle">
             <span :style="comStyle">{{ currentZhibiao }}</span>
-            <!-- comStyle是随着主题变化改变字体颜色 -->
+            <!-- comStyle随着主题变化改变字体颜色 -->
             <span class="iconfont title-icon" @click="showChoice = !showChoice" :style="comStyle">&#xe6eb;</span>
             <div class="select-con" v-show="showChoice">
                 <div class="select-item" :style="comStyle" @click="handleSelect(item)" v-for="item in selectfilter"> {{
@@ -81,7 +81,6 @@ export default {
         this.$bus.$on('changebackGround', (info) => {
             if (info.name == 'seller') {
                 this.sta = info.sta
-                // console.log(this.sta);
                 this.initChart()
             }
         })
@@ -94,8 +93,7 @@ export default {
     },
     methods: {
         initChart() {
-            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
-            // console.log(backgroundColor);
+            const backgroundColor = this.sta ? 'rgba(198,226,255,1)' : 'rgba(41,52,65,0.2)';
             this.chartInstance = this.$echarts.init(this.$refs.seller_ref, this.theme)
             const initOption = {
                 backgroundColor: backgroundColor,
@@ -208,7 +206,6 @@ export default {
                     return b.C - a.C;
                 })
                 const showData = this.allData.slice(0, 7)
-                // console.log(showData);
                 this.sellNames = showData.map((item) => {//x轴数据
                     return item.province
                 }).reverse()
@@ -296,8 +293,6 @@ export default {
             this.chartInstance.resize()
         },
         handleSelect(currentInfo) {//currentinfo表示当前点击的条目
-            // this.allData = currentInfo.chartData
-            // this.currentYear = currentInfo.year
             this.currentZhibiao = currentInfo
             this.updateChart()
             this.showChoice = false

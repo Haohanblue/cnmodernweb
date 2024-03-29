@@ -29,7 +29,7 @@ export default {
             value: [],
             selectedValue: ['A', 'A1'], // 这里是“常住人口比例”对应的value路径,默认显示的
             currentUnit: "%",
-            sta:false,
+            sta: false,
         }
     },
     computed: {
@@ -54,7 +54,6 @@ export default {
             this.currentPro = name
             this.currentPro = [this.currentPro]
             this.getData()
-            // this.updateChart()
         })
         this.$bus.$on('changebackGround', (info) => {
             if (info.name == 'zujian4') {
@@ -75,15 +74,15 @@ export default {
     },
     methods: {
         initChart() {
-            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
+            const backgroundColor = this.sta ? 'rgba(198,226,255,1)' : 'rgba(41,52,65,0.2)';
             this.chartInstance = this.$echarts.init(this.$refs.zujian4_ref, this.theme)
             const initOption = {
-                backgroundColor:backgroundColor,
+                backgroundColor: backgroundColor,
                 title: {
                     text: this.currentPro,
                     left: 270,
                     top: 15,
-                    color:"#00000"
+                    color: "#00000"
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -98,14 +97,13 @@ export default {
                 xAxis: {
                     type: 'category',
                     axisLabel: {
-                        //坐标轴刻度标签的显示间隔，在类目轴中有效。默认会采用标签不重叠的策略间隔显示标签。可以设置成 0 强制显示所有标签。
                         interval: 4,
                         textStyle: {
                             color: "#556677",
                         },
                         fontSize: 12,
                         formatter: function (value) {
-                                return value;
+                            return value;
                         }
                     },
                     boundaryGap: false,
@@ -118,7 +116,7 @@ export default {
             this.chartInstance.setOption(initOption)
         },
         getData() {
-            this.currentUnit=indicators[this.currentzhiBiao].unit
+            this.currentUnit = indicators[this.currentzhiBiao].unit
             getFilledData(this.currentPro, this.year, this.currentzhiBiao)
                 .then(data => {
                     this.value = data.map(item => item[this.currentzhiBiao]);
@@ -139,10 +137,9 @@ export default {
                             text: '单位：' + this.currentUnit,
                             fontWeight: 'bold',
                             textAlign: 'center',
-                            fontSize:16,
-                            // fill:'white',
+                            fontSize: 16,
                             textVerticalAlign: 'bottom',
-                            fill:getThemeValue(this.theme).titleColor, 
+                            fill: getThemeValue(this.theme).titleColor,
                         },
                         left: 'center',  // 水平居中
                         bottom: 5  // 距离容器底部的距离
@@ -159,7 +156,7 @@ export default {
                         data: this.value,
                         type: 'line',
                         areaStyle: {
-                            color:'rgba(252,151,175,0.8)'
+                            color: 'rgba(252,151,175,0.8)'
                         },
                     }
                 ]

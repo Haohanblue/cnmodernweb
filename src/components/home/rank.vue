@@ -28,13 +28,11 @@ export default {
         })
 
         this.initChart()
-        // this.getData()
         window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
         this.$bus.$on('changebackGround', (info) => {
             if (info.name == 'rank') {
                 this.sta = info.sta
-                // console.log(this.sta);
                 this.updateChart()
             }
         })
@@ -60,7 +58,7 @@ export default {
         initChart() {
             this.chartInstance = this.$echarts.init(this.$refs.rank_ref, this.theme)
             const initOption = {
-                backgroundColor:'rgba(41,52,65,0.2)',
+                backgroundColor: 'rgba(41,52,65,0.2)',
                 title: {
                     text: '区域现代化指数',
                     left: 20,
@@ -74,7 +72,7 @@ export default {
                     {
                         type: 'pie', // 设置图表类型为饼图
                         radius: '55%', // 饼图半径
-                        data: [], // 数据暂时为空，后续在updateChart中设置
+                        data: [], //在updateChart中设置
                         emphasis: {
                             itemStyle: {
                                 shadowBlur: 10,
@@ -88,7 +86,6 @@ export default {
                                 show: true,
                                 position: 'left',
                                 color: getThemeValue(this.theme).titleColor,
-                                // fontWeight:'bold',
                                 fontSize: 15
                             },
                             emphasis: {
@@ -118,14 +115,13 @@ export default {
             } else {
                 if (yearIndex !== -1) {
                     this.allData = this.rets[yearIndex]
-                    // console.log(this.allData);
                     this.updateChart();
                 }
             }
 
         },
         updateChart() {
-            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
+            const backgroundColor = this.sta ? 'rgba(198,226,255,1)' : 'rgba(41,52,65,0.2)';
             const gradientColorList = [
                 [{ offset: 0, color: '#a1c4fd' }, { offset: 1, color: '#c2e9fb' }],//0
                 [{ offset: 0, color: '#ee9ca7' }, { offset: 1, color: '#ffdde1' }],//1
