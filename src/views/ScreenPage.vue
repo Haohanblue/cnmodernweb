@@ -133,7 +133,7 @@ export default {
         },
         changeTheme() {
             this.$store.commit('changeTheme')
-            
+
         }
     },
     computed: {
@@ -188,7 +188,7 @@ export default {
 
 .screen-container {
     width: 100%;
-    height: 95%;
+    height: 93%;
     padding: 0 20px;
     // background-color: #161522;
     color: #fff;

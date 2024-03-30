@@ -1,8 +1,12 @@
 <template>
-    <div class="com-container">
-        <div class="com-chart" ref="map_ref">
+
+        <div class="com-container" >
+            <div class="com-chart" ref="map_ref">
+            </div>
         </div>
-    </div>
+
+
+
 </template>
 <script>
 import axios from 'axios'
@@ -103,8 +107,8 @@ export default {
         updateChart() {
             const colorarr = [
                 'red', 'green','DeepPink', 'Blue',
-                 'red', 'green', 'DeepPink','Blue', 
-                 'red', 'green','DeepPink', 'Blue', 
+                 'red', 'green', 'DeepPink','Blue',
+                 'red', 'green','DeepPink', 'Blue',
                  'red', 'green','DeepPink', 'Blue',
                   'red', 'green','DeepPink', 'Blue',
                   'red', 'green','DeepPink', 'Blue',

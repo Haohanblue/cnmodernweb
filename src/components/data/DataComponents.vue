@@ -59,7 +59,7 @@
                         </el-collapse>
                 </el-row>
                 <div class="table">
-                    <el-table :data="viewData" style="width: 100%" height="550"
+                    <el-table :data="viewData" style="width: 100%" height="530"
                               fit :header-cell-style="{textAlign: 'center'}"
                               :cell-style="{ textAlign: 'center' }">
                         <el-table-column

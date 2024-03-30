@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import SellerPage2 from '@/views/sellerpage2'
-import TrendPage from '@/views/TrendPage'
-import mapPage2 from '@/views/mapPage2'
-import rankPage from'@/views/rankPage'
+import SellerPage2 from '@/views/ScreenPageChildern/sellerpage2.vue'
+import TrendPage from '@/views/ScreenPageChildern/TrendPage.vue'
+import mapPage2 from '@/views/ScreenPageChildern/mapPage2.vue'
+import rankPage from '@/views/ScreenPageChildern/rankPage.vue'
 import ScreenPage from '@/views/ScreenPage'
-import zujian4Page from '@/views/zujian4Page.vue'
+import zujian4Page from '@/views/ScreenPageChildern/zujian4Page.vue'
 import DataPage from '@/views/DataPage.vue'
 import BillboardPage from "@/views/BillboardPage.vue";
 import AchievementPage from "@/views/AchievementPage.vue";

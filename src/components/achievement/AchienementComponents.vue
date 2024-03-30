@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="all">
+        <div class="banner"></div>
         <el-carousel :interval="4000" type="card" height="300">
             <el-carousel-item v-for="(item, index) in images" :key="item">
                 <h3 class="medium"> <img :src="images[index]" alt="Image" width="100%" height="300px"></h3>
@@ -231,6 +232,10 @@ this.chartInstance.setOption(initOption)
 }
 
 .com-container {
-    height: 360px;
+    height: 40vh;
+}
+.all{
+    height: 93%;
+
 }
 </style>

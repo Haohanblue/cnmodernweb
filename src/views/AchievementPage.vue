@@ -1,6 +1,6 @@
 <template>
     <div class="pageall">
-        <h1><AchienementComponents></AchienementComponents></h1>
+        <AchienementComponents></AchienementComponents>
     </div>
 </template>
 <script>
@@ -22,7 +22,7 @@ export default {
 </script>
 <style lang="css" scoped>
 .pageall{
-    height: 100vh;
+    height: 93%;
     background-size: cover; /* 或者使用其他值来适配你的设计需求 */
     background-position: center center;
     background-repeat: no-repeat;
