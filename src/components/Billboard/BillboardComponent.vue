@@ -194,7 +194,6 @@ export default {
     padding: 10px;
     padding-left: 100px;
     padding-right: 100px;
-    background-color: #f5f5f5;
 
 }
 

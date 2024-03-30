@@ -246,9 +246,7 @@ export default {
 </script>
 
 <style scoped>
-.container{
-    background-color: #f5f5f5;
-}
+
 .header{
     display: flex;
     justify-content: space-between;
