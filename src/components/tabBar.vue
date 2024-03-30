@@ -6,6 +6,7 @@
                     <el-tab-pane label="首页" name="screen" ></el-tab-pane>
                     <el-tab-pane label="排行" name="billboard"></el-tab-pane>
                     <el-tab-pane label="成就" name="achievement" ></el-tab-pane>
+                    <el-tab-pane label="时间轴" name="timeline" ></el-tab-pane>
                     <el-tab-pane label="数据" name="data" ></el-tab-pane>
                 </el-tabs>
             </el-col>
