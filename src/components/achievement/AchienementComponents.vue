@@ -21,11 +21,11 @@ export default {
             chartInstance: null,
             allData: null,
             images: [
-                require('../../../public/static/achievement/A.png'),
-                require('../../../public/static/achievement/B.png'),
-                require('../../../public/static/achievement/C.png'),
-                require('../../../public/static/achievement/D.png'),
-                require('../../../public/static/achievement/E.png')
+                require('@/assets/images/achievement/A.png'),
+                require('@/assets/images/achievement/B.png'),
+                require('@/assets/images/achievement/C.png'),
+                require('@/assets/images/achievement/D.png'),
+                require('@/assets/images/achievement/E.png')
             ],
             hdiData: null,
             seletedYears: [],
