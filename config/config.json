@@ -1,5 +1,5 @@
 {
     "PORT": 23333,
-    "BASEURL":"https://cnmodern.site:23333",
-    "AXIOSURL":"https://cnmodern.site:23334"
+    "BASEURL":"http://localhost:23333",
+    "AXIOSURL":"http://localhost:23334"
   }
