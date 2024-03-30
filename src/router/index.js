@@ -10,7 +10,7 @@ import zujian4Page from '@/views/zujian4Page.vue'
 import DataPage from '@/views/DataPage.vue'
 import BillboardPage from "@/views/BillboardPage.vue";
 import AchievementPage from "@/views/AchievementPage.vue";
-
+import TimeLinePage from "@/views/TimeLinePage.vue";
 
 Vue.use(VueRouter)
 
@@ -32,6 +32,8 @@ const routes = [
   {path:'/achievement',
   component: AchievementPage
   },
+  {path:'/timeline',
+  component:TimeLinePage}
 ]
 
 const router = new VueRouter({
