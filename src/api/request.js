@@ -1,5 +1,5 @@
 import axios from 'axios';
-const AXIOSURL = require('../../config/config.json').AXIOSURL;
+const AXIOSURL = require('../../config/config.js').AXIOSURL;
 export function getRankingsByYear(year) {
     const url = `${AXIOSURL}/sql/data/main/${year}`;
     return axios.get(url)

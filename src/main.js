@@ -10,7 +10,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import timelineCarousel from 'timeline-carousel'
 
 // import '../public/static/css/iconfont.css'
-const AXIOSURL = require('../config/config.json').AXIOSURL;
+const config = require('../config/config.js');
+
+const AXIOSURL = config.AXIOSURL;
 axios.defaults.baseURL = AXIOSURL
 Vue.prototype.$http = axios
 Vue.prototype.$echarts = window.echarts
