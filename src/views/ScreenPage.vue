@@ -133,7 +133,7 @@ export default {
         },
         changeTheme() {
             this.$store.commit('changeTheme')
-            
+
         }
     },
     computed: {
@@ -160,9 +160,9 @@ export default {
 @font-face {
     font-family: 'iconfont';
     /* Project id 4436678 */
-    src: url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff2?t=1708314494825') format('woff2'),
-        url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff?t=1708314494825') format('woff'),
-        url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.ttf?t=1708314494825') format('truetype');
+    src: url('https://at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff2?t=1708314494825') format('woff2'),
+        url('https://at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff?t=1708314494825') format('woff'),
+        url('https://at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.ttf?t=1708314494825') format('truetype');
 }
 
 .iconfont {
@@ -188,7 +188,7 @@ export default {
 
 .screen-container {
     width: 100%;
-    height: 95%;
+    height: 93%;
     padding: 0 20px;
     // background-color: #161522;
     color: #fff;

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pageall">
         <data-components/><!-- Your code here -->
     </div>
 </template>
@@ -25,5 +25,11 @@ export default {
 </script>
 
 <style scoped>
-/* Your component styles here */
+.pageall{
+    height: 93%;
+    background-size: cover; /* 或者使用其他值来适配你的设计需求 */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url('~@/assets/beijin.png');
+}
 </style>

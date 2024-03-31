@@ -1,25 +1,18 @@
 <template>
-    <div class="pageall">
-    <billboard-components></billboard-components>
-    </div>
+<div class="pageall">
+    <TimelineComponent></TimelineComponent>
+</div>
 </template>
+
 <script>
-import BillboardComponents from "@/components/Billboard/BillboardComponent.vue";
+import TimelineComponent from "@/components/TimeLine/TimelineComponent.vue";
 
 export default {
-    components: {BillboardComponents},
-   data() {
-      return {
-      }
-   },
-   created(){
-   },
-   computed:{
-   },
-   methods:{
-   },
+    name: "TimeLinePage",
+    components: {TimelineComponent}
 }
 </script>
+
 <style scoped>
 .pageall{
     height: 93%;

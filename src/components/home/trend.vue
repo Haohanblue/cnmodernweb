@@ -21,7 +21,6 @@ export default {
     mounted() {
         this.$bus.$on('year-changed', (newYear) => {
             this.currentYear = newYear;
-            // console.log(this.currentYear);
             this.getData()
         })
         this.$bus.$on('dataReceived', (data) => {
@@ -30,10 +29,8 @@ export default {
             this.updateChart(); // 使用新数据更新图表
         });
         this.$bus.$on('province-change', (name) => {
-            // console.log(name);
             this.currentPro = name
             // console.log("传过来的省份名称是"+name);
-            // this.getData()
             this.updateChart()
         })
         this.initChart()
@@ -43,7 +40,6 @@ export default {
         this.$bus.$on('changebackGround', (info) => {
             if (info.name == 'trend') {
                 this.sta = info.sta
-                // console.log(this.sta);
                 this.initChart()
             }
         })
@@ -68,7 +64,7 @@ export default {
     },
     methods: {
         initChart() {
-            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
+            const backgroundColor = this.sta ? 'rgba(198,226,255,1)' : 'rgba(41,52,65,0.2)';
             this.chartInstance = this.$echarts.init(this.$refs.trend_ref, this.theme)
             const initOption = {
                 backgroundColor: backgroundColor,
@@ -79,47 +75,47 @@ export default {
                     color: '#00000'
                 },
                 radar: [
-                    {                       // 雷达图坐标系组件，只适用于雷达图。
-                        center: ['50%', '55%'],             // 圆中心坐标，数组的第一项是横坐标，第二项是纵坐标。[ default: ['50%', '50%'] ]
-                        radius: 100,                        // 圆的半径，数组的第一项是内半径，第二项是外半径。
-                        name: {                             // (圆外的标签)雷达图每个指示器名称的配置项。
+                    {
+                        center: ['50%', '55%'],             // 圆中心坐标
+                        radius: 100,                        // 圆的半径
+                        name: {
                             textStyle: {
                                 fontSize: 14,
                                 color: '#CCC'
                             }
                         },
-                        nameGap: 5,                        // 指示器名称和指示器轴的距离。[ default: 15 ]
-                        splitNumber: 4,                     // (这里是圆的环数)指示器轴的分割段数。[ default: 5 ]
-                        shape: 'polygon',                    // 雷达图绘制类型，支持 'polygon'(多边形) 和 'circle'(圆)。[ default: 'polygon' ]
-                        axisLine: {                         // (圆内的几条直线)坐标轴轴线相关设置
+                        nameGap: 5,                        // 指示器名称和指示器轴的距离
+                        splitNumber: 4,                     // 这里是圆的环数
+                        shape: 'polygon',
+                        axisLine: {
                             lineStyle: {
-                                color: '#fff',                   // 坐标轴线线的颜色。
-                                width: 1,                      	 // 坐标轴线线宽。
-                                type: 'solid',                   // 坐标轴线线的类型。
+                                color: '#fff',
+                                width: 1,
+                                type: 'solid',
                             }
                         },
-                        splitLine: {                        // (这里是指所有圆环)坐标轴在 grid 区域中的分隔线。
+                        splitLine: {
                             lineStyle: {
-                                color: '#fff',                       // 分隔线颜色
-                                width: 2, 							 // 分隔线线宽
+                                color: '#fff',
+                                width: 2,
                             }
                         },
-                        splitArea: {                        // 坐标轴在 grid 区域中的分隔区域，默认不显示。
+                        splitArea: {
                             show: true,
                         },
                     }],
                 series: [{
-                    type: 'radar',              // 系列类型: 雷达图
-                    itemStyle: {             // 折线拐点标志的样式。
+                    type: 'radar',
+                    itemStyle: {
                         color: '#5840D4',
                         borderColor: '#5840D4',
-                        normal: {                   // 普通状态时的样式
+                        normal: {
                             lineStyle: {
                                 width: 1
                             },
                             opacity: 0.2
                         },
-                        emphasis: {                 // 高亮时的样式
+                        emphasis: {  // 高亮时的样式
                             lineStyle: {
                                 width: 5
                             },
@@ -135,15 +131,12 @@ export default {
 
         },
         async getData() {
-            // console.log(this.currentYear);
             var yearIndex = this.currentYear - 2000;
             if (yearIndex !== -1) {
                 if (this.rets == null) {
                     console.log("没获取到数据，请稍后");
                 } else {
-                    // console.log(yearIndex);
                     this.allData = this.rets[yearIndex].chartData;
-                    // console.log(this.allData);
                     this.updateChart(); // 用新数据更新图表
                 }
 
@@ -152,11 +145,9 @@ export default {
         updateChart() {
             const targetData = this.allData.find(item => item.province === this.currentPro)
             if (targetData == null) {
-                // console.log(this.allData);
                 console.log("正在加载数据");
 
             } else {
-                // console.log(targetData);
                 const valueArr = [targetData.C, targetData.A, targetData.E, targetData.D, targetData.B]
                 const dataOption = {
                     title: {
@@ -171,28 +162,37 @@ export default {
                         }]
                     }],
                     radar: [
-                    {
-                        indicator: [
-                            { name: '物质文明与精神文明相协调'+'\n'+targetData.C,max: 100,                               // 指示器的最大值，可选，建议设置 
-                            color: getThemeValue(this.theme).titleColor,},
-                            { name: '人口规模巨大'+'\n'+targetData.A,max: 100,                               // 指示器的最大值，可选，建议设置 
-                            color: getThemeValue(this.theme).titleColor,},
-                            { name: '走和平发展道路'+'\n'+targetData.E,max: 100,                               // 指示器的最大值，可选，建议设置 
-                            color: getThemeValue(this.theme).titleColor,},
-                            { name: '人与自然和谐共生'+'\n'+targetData.D,max: 100,                               // 指示器的最大值，可选，建议设置 
-                            color: getThemeValue(this.theme).titleColor,},
-                            { name: '共同富裕'+'\n'+targetData.B,max: 100,                               // 指示器的最大值，可选，建议设置 
-                            color: getThemeValue(this.theme).titleColor,}
-                        ]
-                    }
-                ],
+                        {
+                            indicator: [
+                                {
+                                    name: '物质文明与精神文明相协调' + '\n' + targetData.C, max: 100,
+                                    color: getThemeValue(this.theme).titleColor,
+                                },
+                                {
+                                    name: '人口规模巨大' + '\n' + targetData.A, max: 100,
+                                    color: getThemeValue(this.theme).titleColor,
+                                },
+                                {
+                                    name: '走和平发展道路' + '\n' + targetData.E, max: 100,
+                                    color: getThemeValue(this.theme).titleColor,
+                                },
+                                {
+                                    name: '人与自然和谐共生' + '\n' + targetData.D, max: 100,
+                                    color: getThemeValue(this.theme).titleColor,
+                                },
+                                {
+                                    name: '共同富裕' + '\n' + targetData.B, max: 100,
+                                    color: getThemeValue(this.theme).titleColor,
+                                }
+                            ]
+                        }
+                    ],
                 }
                 this.chartInstance.setOption(dataOption)
             }
 
         },
         screenAdapter() {
-            // console.log(document.querySelector('.com-chart').offsetWidth)
             const titleFontsize = document.querySelector('.com-chart').offsetWidth
             // const titleFontsize=this.$refs.trend_ref.offsetWidth /100 *3.6
             const adapterOption = {
@@ -201,12 +201,12 @@ export default {
                         fontSize: titleFontsize * 0.05
                     },
                 },
-                radar:[
+                radar: [
                     {
-                        radius: titleFontsize*0.225,
-                        name:{
+                        radius: titleFontsize * 0.225,
+                        name: {
                             textStyle: {
-                                fontSize: titleFontsize*0.035,
+                                fontSize: titleFontsize * 0.035,
                             }
                         }
                     }

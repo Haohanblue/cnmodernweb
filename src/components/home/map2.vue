@@ -1,8 +1,12 @@
 <template>
-    <div class="com-container">
-        <div class="com-chart" ref="map_ref">
+
+        <div class="com-container" >
+            <div class="com-chart" ref="map_ref">
+            </div>
         </div>
-    </div>
+
+
+
 </template>
 <script>
 import axios from 'axios'
@@ -32,10 +36,10 @@ export default {
             this.getData(),
             window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
-        this.$refs['map_ref'].addEventListener('wheel', this.handleMapZoom, { passive: false })// 修改这行，绑定到地图容器
+        this.$refs['map_ref'].addEventListener('wheel', this.handleMapZoom, { passive: false })//绑定到地图容器
         this.chartInstance.on('timelinechanged', (params) => {
             const newYear = this.arrYear[params.currentIndex];
-            this.currentYear = newYear; // 更新组件内部状态
+            this.currentYear = newYear;
             if (this.isPro.includes(this.currentPro)) {
                 this.$bus.$emit('province-change', this.currentPro);
             }
@@ -52,23 +56,23 @@ export default {
     },
     destroyed() {
         window.removeEventListener('reisze', this.screenAdapter)
-        this.$refs['map_ref'].removeEventListener('wheel', this.handleMapZoom) // 修改这行，移除绑定的监听器
+        this.$refs['map_ref'].removeEventListener('wheel', this.handleMapZoom) //移除绑定的监听器
         this.$bus.$off('dataReceived')
         this.$bus.$off('changebackGround')
 
     },
     methods: {
         async initChart() {
-            const backgroundColor = this.sta ? 'rgba(41,52,65,1)' : 'rgba(41,52,65,0.2)';
-            this.chartInstance = this.$echarts.init(this.$refs.map_ref,this.theme)
+            const backgroundColor = this.sta ? 'rgba(198,226,255,1)' : 'rgba(41,52,65,0.2)';
+            this.chartInstance = this.$echarts.init(this.$refs.map_ref, this.theme)
             //获取中国地图的矢量数据
             const ret = await axios.get(BASEURL + '/static/map/china.json')
             this.$echarts.registerMap('china', ret.data)
             //初始化地图
             const initOption = {
-                backgroundColor:backgroundColor,
-                title:{
-                    color:getThemeValue(this.theme).titleColor
+                backgroundColor: backgroundColor,
+                title: {
+                    color: getThemeValue(this.theme).titleColor
                 },
                 geo: {
                     type: 'map',
@@ -102,16 +106,20 @@ export default {
         },
         updateChart() {
             const colorarr = [
-                'red', 'green', 'blue',
-                'DeepPink', 'DeepSkyBlue', 'red', 'green', 'blue','DeepPink','red', 'green', 'blue',
-                'DeepPink', 'DeepSkyBlue','red', 'green', 'blue',
-                'DeepPink', 'DeepSkyBlue','red', 'green', 'blue',
-                'DeepPink', 'DeepSkyBlue',
-
+                'red', 'green','DeepPink', 'Blue',
+                 'red', 'green', 'DeepPink','Blue',
+                 'red', 'green','DeepPink', 'Blue',
+                 'red', 'green','DeepPink', 'Blue',
+                  'red', 'green','DeepPink', 'Blue',
+                  'red', 'green','DeepPink', 'Blue',
             ]
 
             const dataOption = {
                 timeline: {
+                    tooltip: {
+                        show: true,
+                        formatter: '{b}年'
+                    },
                     data: this.arrYear,
                     axisType: 'category',
                     autoPlay: true,
@@ -119,6 +127,7 @@ export default {
                     left: '8%',
                     right: '2%',
                     width: '80%',
+                    bottom:'5%',
                     label: {
                         normal: {
                             textStyle: {
@@ -172,14 +181,11 @@ export default {
                     name: data.province,
                     value: data.score
                 }));
-                // this.currentYear=item.year
-                // console.log(this.currentYear);
                 dataOption.options.push({
                     title: {
                         text: item.year + '年各省现代化程度',
                         left: "5%",
                         top: "5%",
-                        // color: getThemeValue(this.theme).titleColor
                     },
                     series: [
                         {
@@ -219,7 +225,7 @@ export default {
             event.preventDefault();
             // 获取当前地图的缩放级别
             let scale = this.chartInstance.getOption().geo[0].zoom || 1;
-            // 根据滚动的方向调整缩放级别，这里将缩放因子调整为1.2和0.8，以增加灵敏度
+            // 根据滚动的方向调整缩放级别
             scale *= (event.deltaY > 0) ? 0.8 : 1.2;
             // 限制缩放级别，避免过度放大或缩小
             scale = Math.min(Math.max(scale, 0.5), 5);
@@ -231,9 +237,7 @@ export default {
             });
         },
         updateYear(year) {
-            // console.log(year);
             this.currentYear = year;
-            // console.log(currentYear);
             // 发送事件到全局事件总线
             this.$bus.$emit('year-changed', year);
         },
