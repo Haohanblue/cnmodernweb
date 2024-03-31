@@ -11,7 +11,7 @@
 <script>
 import axios from 'axios'
 import { mapState } from "vuex"
-const BASEURL = require('../../../config/config.json').BASEURL;
+const BASEURL = require('../../../config/config.js').BASEURL;
 import { getThemeValue } from "@/utils/theme.utils";
 export default {
     data() {
@@ -66,8 +66,9 @@ export default {
             const backgroundColor = this.sta ? 'rgba(198,226,255,1)' : 'rgba(41,52,65,0.2)';
             this.chartInstance = this.$echarts.init(this.$refs.map_ref, this.theme)
             //获取中国地图的矢量数据
-            const ret = await axios.get(BASEURL + '/static/map/china.json')
-            this.$echarts.registerMap('china', ret.data)
+            
+            const ret = require('../../../public/static/map/china.json');
+            this.$echarts.registerMap('china', ret);
             //初始化地图
             const initOption = {
                 backgroundColor: backgroundColor,

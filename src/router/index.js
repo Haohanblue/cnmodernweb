@@ -35,9 +35,23 @@ const routes = [
   {path:'/timeline',
   component:TimeLinePage}
 ]
+const configJson = require('../../config/config.json');
 
+let mode;
+
+switch (configJson.ISLOCAL) {
+  case 0:
+  case 2:
+    mode = 'hash';
+    break;
+  case 1:
+    mode = 'history';
+    break;
+  default:
+    mode = 'hash'; // 默认值，你可以根据你的需求来修改
+}
 const router = new VueRouter({
-  mode:'history',
+  mode,
   routes
 })
 
