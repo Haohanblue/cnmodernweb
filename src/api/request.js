@@ -51,7 +51,6 @@ export function getHdiData(year, columns) {
     if (columns) params.append('columns', columns);
     // 创建 URL
     const url = `${AXIOSURL}/sql/data/hdi?${params.toString()}`;
-    console.log(url);
     return axios.get(url)
         .then(response => response.data)
         .catch(error => {
@@ -90,7 +89,6 @@ export function downloadFilledData(province, year, columns) {
     return axios.get(url, { responseType: 'blob' })
         .then(response => response.data)
         .catch(error => {
-            console.error(error);
             throw error;
         });
 }

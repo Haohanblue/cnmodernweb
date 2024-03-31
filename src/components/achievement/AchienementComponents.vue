@@ -68,7 +68,6 @@ this.chartInstance.setOption(initOption)
             let columns = this.seletedArea
             getHdiData(year, columns).then(data => {
                 this.hdiData = data
-                console.log(this.hdiData)
                 this.updateChart()
             })
 
@@ -77,7 +76,6 @@ this.chartInstance.setOption(initOption)
         updateChart() {
             // 处理图表需要的数据
             const years = this.hdiData.map(item => item.year)
-            console.log(years);
             const chinaData = this.hdiData.map(item => item['中国']);
             const usaData = this.hdiData.map(item => item['美国']);
             const worldData = this.hdiData.map(item => item['世界']);

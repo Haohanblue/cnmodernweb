@@ -160,9 +160,9 @@ export default {
 @font-face {
     font-family: 'iconfont';
     /* Project id 4436678 */
-    src: url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff2?t=1708314494825') format('woff2'),
-        url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff?t=1708314494825') format('woff'),
-        url('//at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.ttf?t=1708314494825') format('truetype');
+    src: url('https://at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff2?t=1708314494825') format('woff2'),
+        url('https://at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.woff?t=1708314494825') format('woff'),
+        url('https://at.alicdn.com/t/c/font_4436678_9k41j5qrgrm.ttf?t=1708314494825') format('truetype');
 }
 
 .iconfont {
