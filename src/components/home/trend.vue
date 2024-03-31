@@ -203,7 +203,7 @@ export default {
                 },
                 radar: [
                     {
-                        radius: titleFontsize * 0.225,
+                        radius: titleFontsize * 0.2,
                         name: {
                             textStyle: {
                                 fontSize: titleFontsize * 0.035,

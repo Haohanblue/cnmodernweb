@@ -19,8 +19,8 @@
                 </header>
                 <el-row class="aligned-row">
                         <el-collapse v-model="activeName" accordion>
-                            <el-col :span="8">
-                                <el-collapse-item title="选择地区" name="1">
+                            <el-col :span="8" >
+                                <el-collapse-item title="选择地区" name="1" >
                                     <el-checkbox-group v-model="selectedProvinces">
                                         <el-checkbox label="全选" :indeterminate="isIndeterminate" @change="handleCheckAllChange"></el-checkbox>
                                         <div class="line"></div>
@@ -29,7 +29,7 @@
                                 </el-collapse-item>
                             </el-col>
                             <el-col :span="8">
-                                <el-collapse-item title="选择指标" name="2">
+                                <el-collapse-item title="   选择指标" name="2">
                                     <div class="block" style="display: flex;justify-content: space-around;align-items: baseline">
                                         <span>指标：</span>
                                         <el-cascader
@@ -46,7 +46,7 @@
                                 </el-collapse-item>
                             </el-col>
                             <el-col :span="8">
-                                <el-collapse-item title="选择时间" name="3">
+                                <el-collapse-item title="   选择时间" name="3">
                                     <div class="block" style="display: flex;justify-content: center;flex-direction: column;align-items: center">
                                         <div style="display: flex;justify-content: space-between;width: 100%">
                                             <span style="font-size: 12px"><el-input class="el-input" style="width: 75px" size="mini"  v-model="startYear" type="number" :min="2000" :max="2023"></el-input> 开始年份</span>
