@@ -5,7 +5,7 @@
         </div>
         <router-view class="main"></router-view>
         <div>
-            <Footer></Footer>
+            <Myfooter></Myfooter>
         </div>
     </div>
 </template>
@@ -30,5 +30,5 @@
 
 <script setup>
 import TabBar from "@/components/tabBar.vue";
-import Footer from "@/components/footer.vue";
+import Myfooter from "@/components/Myfooter.vue";
 </script>
