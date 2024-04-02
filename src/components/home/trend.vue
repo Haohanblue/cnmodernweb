@@ -134,7 +134,7 @@ export default {
             var yearIndex = this.currentYear - 2000;
             if (yearIndex !== -1) {
                 if (this.rets == null) {
-                    console.log("没获取到数据，请稍后");
+                    //  console.log("没获取到数据，请稍后");
                 } else {
                     this.allData = this.rets[yearIndex].chartData;
                     this.updateChart(); // 用新数据更新图表
@@ -145,7 +145,7 @@ export default {
         updateChart() {
             const targetData = this.allData.find(item => item.province === this.currentPro)
             if (targetData == null) {
-                console.log("正在加载数据");
+                //console.log("正在加载数据");
 
             } else {
                 const valueArr = [targetData.C, targetData.A, targetData.E, targetData.D, targetData.B]
