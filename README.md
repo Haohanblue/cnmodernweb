@@ -1,9 +1,19 @@
-# Vue 3 + TypeScript + Vite
+# cnmodernweb
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 安装依赖
+```
+npm install
+```
+## 本地运行
+```
+npm run serve
+```
+## 项目打包
+```
+npm run build
+```
 
-## Recommended Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar) and disable Vetur
-
-- Use [vue-tsc](https://github.com/vuejs/language-tools/tree/master/packages/tsc) for performing the same type checking from the command line, or for generating d.ts files for SFCs.
+## 关于config.json的配置
+ISLOCAL:0 本地开发模式（需要在本地运行server）
+ISLOCAL:1 项目部署模式（本地无法运行，打包后部署到服务器上）
+ISLOCAL:2 本地运行项目模式 （在本地打包后运行，需要有远程的后端接口在启动）
