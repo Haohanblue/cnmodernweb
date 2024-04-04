@@ -51,9 +51,12 @@ export default {
     mounted() {
         //获取地图点击
         this.$bus.$on('province-change', (name) => {
-            this.currentPro = name
-            this.currentPro = [this.currentPro]
-            this.getData()
+            if(this.currentPro[0] == name){
+                return
+            }else{
+                this.currentPro = [name]
+                this.getData()
+            }
         })
         this.$bus.$on('changebackGround', (info) => {
             if (info.name == 'zujian4') {
@@ -63,9 +66,12 @@ export default {
             }
         })
         this.initChart()
-        this.getData()
+        
         window.addEventListener('resize', this.screenAdapter)
         this.screenAdapter()
+    },
+    created() {
+        this.getData()
     },
     destroyed() {
         window.removeEventListener('resize', this.screenAdapter)

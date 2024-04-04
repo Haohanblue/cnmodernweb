@@ -193,7 +193,7 @@ export default {
             let yearIndex = this.currentYear - 2000;
             if (yearIndex !== -1) {
                 if (this.rets == null) {
-                    console.log("没获取到数据，请稍后");
+                    //console.log("没获取到数据，请稍后");
                 } else {
                     this.allData = this.rets[yearIndex].chartData;
                     this.updateChart(); // 用新数据更新图表
